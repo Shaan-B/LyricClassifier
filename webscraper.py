@@ -1,6 +1,9 @@
+#Modified from https://bigishdata.com/2016/09/27/getting-song-lyrics-from-geniuss-api-scraping/
+
 import requests
 import locale
 from bs4 import BeautifulSoup
+from song import Song
 
 #Do not change!
 base_url = "http://api.genius.com"
@@ -18,9 +21,9 @@ def lyrics_from_song_api_path(song_api_path):
     #remove script tags that they put in the middle of the lyrics[h.extract() for h in html('script')]
     #at least Genius is nice and has a tag called 'lyrics'!
     lyrics = html.find("div", class_ = "lyrics").get_text() #updated css where the lyrics are based in HTML
-    return lyrics.encode('utf-8')
+    return lyrics.encode('ascii', 'ignore')
 
-def getLyrics(song_title='Wanted You', artist_name ='Nav'):
+def getLyrics(song_title='', artist_name =''):
     search_url = base_url + "/search"
     params = {'q': song_title + " " + artist_name}
     response = requests.get(search_url, params=params, headers=headers)
@@ -29,28 +32,11 @@ def getLyrics(song_title='Wanted You', artist_name ='Nav'):
     for hit in json["response"]["hits"]:
         if artist_name.lower() in hit["result"]["primary_artist"]["name"].lower(): #requires artist_name is substring of Genius's artist name
             song_info = hit
+            song_title = hit["result"]["title"].encode('ascii', 'ignore')
+            artist_name = hit["result"]["primary_artist"]["name"].encode('ascii', 'ignore')
             break
     if song_info:
         song_api_path = song_info["result"]["api_path"]
-        return lyrics_from_song_api_path(song_api_path)
+        return Song(lyrics_from_song_api_path(song_api_path), song_title, artist_name)
     else:
         return None
-
-#Removes "Chorus", "Verse X", etc. identifiers and newlines
-def removeExtras(lyrics):
-    i = 0
-    while i < len(lyrics): #I think this is bad practice. w/e
-        c = lyrics[i]
-        if c == '\n':
-            lyrics = lyrics[:i] + ' ' + lyrics[i+1:]
-        elif c=='[':
-            j = 1
-            while lyrics[i+j]!=']':
-                j += 1
-            if j<50: #Safety check in case bracket isn't matched
-                lyrics = lyrics[:i]+lyrics[i+j+1:]
-        else:
-            i+=1
-    return lyrics
-
-print removeExtras(getLyrics())
