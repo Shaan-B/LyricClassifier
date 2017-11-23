@@ -31,7 +31,7 @@ def lyrics2POS(songs):
     return fullPOSList
 
 def vectorize(tokenizedList):
-    tfidfVectorizer = TfidfVectorizer(ngram_range=(1, 2), stop_words='english', analyzer='word')
+    tfidfVectorizer = TfidfVectorizer(ngram_range=(1, 1), stop_words='english', analyzer='word')
     vector = tfidfVectorizer.fit_transform(tokenizedList).todense()
     print(tfidfVectorizer.get_feature_names())
     return vector
@@ -55,7 +55,7 @@ def preProcess(songs):
             cleanWords = [word for word in words if word not in set(nltk.corpus.stopwords.words('english'))]
             posTags = nltk.pos_tag(words)
             justTags = [tag for word, tag in posTags]
-      
+
             #print(justTags)
            # print(words)
             #print("clean words: ", cleanWords)
