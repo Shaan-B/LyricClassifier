@@ -6,5 +6,4 @@ brown_ic = wordnet_ic.ic('ic-brown.dat')
 
 moneymitch = open('music/moneymitch.txt')
 for i in moneymitch.readlines():
-    print i
-
+    print (i)
