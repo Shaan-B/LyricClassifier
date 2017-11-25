@@ -1,2 +1,2 @@
 # cowsthattype
-Artificial Intelligence Final Project
+A Deep Learning Approach to Genre Clasification
