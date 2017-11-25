@@ -1,6 +1,7 @@
 import spotifyclient
 import cPickle as pickle
 from nltk.tokenize import word_tokenize
+import os
 
 GENRES = {
 'pop': 'POP',
@@ -39,15 +40,6 @@ class Song(object):
                 if len(genres) > 0:
                     self.genres = genres
 
-    def getLyrics(self, f=None):
-        return self.lyrics
-
-    def getTitle(self):
-        return self.title if len(self.title)>0 else None
-
-    def getArtist(self):
-        return self.artist if len(self.artist)>0 else None
-
     def tokens(self):
         return word_tokenize(self.simpleLyrics())
 
@@ -85,16 +77,23 @@ class Song(object):
 
     def saveLyrics(self, filename):
     #Saves title artist, lyrics to file at filename (creates a file if none exists)
-    #NOTE: To save the entire Song object, use savefull()
+    #NOTE: To save the entire Song object, use saveSong()
         f = open(filename, 'w+')
         f.write(self.title+'\n')
         f.write(self.artist+'\n')
         f.write(self.lyrics+'\n')
         f.close()
 
-    def saveSong(self, filename):
-    #Saves Song object to file at filename
-        f = open(filename, 'wb')
+    def saveSong(self, filename, subdirectory=''):
+    #Saves Song object to file at filename, which can include a subdirectory
+        if len(subdirectory) == 0:
+            f = open(filename, 'wb+')
+        else:
+            try:
+                os.mkdir(subdirectory)
+            except Exception:
+                pass
+            f = open(os.path.join(subdirectory, filename), 'wb+')
         pickle.dump(self, f)
 
     @staticmethod

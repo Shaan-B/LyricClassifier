@@ -1,5 +1,7 @@
-from webscraper import *
+import loadsongs
 
-song = getSong('Wanted You', 'Nav', ['r&b'], 'add')
+loadsongs.save('songlist.txt', 'songs')
+s = loadsongs.load('songs')
 
-print song.genres
+for e in s:
+    print e.title
