@@ -1,4 +1,6 @@
 import spotifyclient
+import cPickle as pickle
+from nltk.tokenize import word_tokenize
 
 GENRES = {
 'pop': 'POP',
@@ -46,11 +48,14 @@ class Song(object):
     def getArtist(self):
         return self.artist if len(self.artist)>0 else None
 
+    def tokens(self):
+        return word_tokenize(self.simpleLyrics())
+
     def  simpleLyrics(self):
     #Removes "[Chorus]", "[Verse X]", etc., punctuation, and newlines
         i = 0
         lyrics = self.lyrics.lower()
-        removeChars = '\n(),.'
+        removeChars = '\n'
         while i < len(lyrics): #I think this is bad practice. w/e
             c = lyrics[i]
             if c in removeChars:
@@ -65,10 +70,11 @@ class Song(object):
                 i+=1
         return lyrics
 
-    def wordFrequencies(self):
+    def tokenFrequencies(self):
     #Takes in a string of song lyrics and returns a dictionary containing
     #each unique word in the lyrics and its frequency
-        words = self.simpleLyrics().split(' ')
+        lyrics = self.simpleLyrics()
+        words = word_tokenize(lyrics)
         freq = {}
         for word in words:
             if word in freq:
@@ -79,20 +85,32 @@ class Song(object):
 
     def saveLyrics(self, filename):
     #Saves title artist, lyrics to file at filename (creates a file if none exists)
-    #NOTE: To save the entire Lyric object, use savefull()
+    #NOTE: To save the entire Song object, use savefull()
         f = open(filename, 'w+')
         f.write(self.title+'\n')
         f.write(self.artist+'\n')
         f.write(self.lyrics+'\n')
         f.close()
 
-def openLyrics(filename):
-#Returns new Lyric object with title, artist, and lyric drawn from file at filename
-#NOTE: To open an entire Lyric object, use openfull()
-    f = open(filename, 'r')
-    contents = f.read()
-    title = contents[:contents.index('\n')]
-    contents = contents[contents.index('\n')+1:]
-    artist = contents[:contents.index('\n')]
-    lyrics = contents[contents.index('\n')+1:]
-    return Song(lyrics, title, artist)
+    def saveSong(self, filename):
+    #Saves Song object to file at filename
+        f = open(filename, 'wb')
+        pickle.dump(self, f)
+
+    @staticmethod
+    def openLyrics(filename):
+    #Returns new Song object with title, artist, and lyric drawn from file at filename
+    #NOTE: To open an entire Lyric object, use openSong()
+        f = open(filename, 'r')
+        contents = f.read()
+        title = contents[:contents.index('\n')]
+        contents = contents[contents.index('\n')+1:]
+        artist = contents[:contents.index('\n')]
+        lyrics = contents[contents.index('\n')+1:]
+        return Song(lyrics, title, artist)
+
+    @staticmethod
+    def openSong(filename):
+    #Returns a new Song object with all data drawn from filename
+        f = open(filename, 'rb')
+        return pickle.load(f)
