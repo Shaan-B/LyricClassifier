@@ -55,6 +55,7 @@ class Song(object):
     def saveLyrics(self, filename):
     #Saves title artist, lyrics to file at filename (creates a file if none exists)
     #NOTE: To save the entire Lyric object, use savefull()
+        print(filename)
         f = open(filename, 'w+')
         f.write(self.title+'\n')
         f.write(self.artist+'\n')

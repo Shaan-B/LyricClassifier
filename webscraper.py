@@ -35,8 +35,10 @@ def getLyrics(song_title='', artist_name =''):
             song_title = hit["result"]["title"].encode('ascii', 'ignore')
             artist_name = hit["result"]["primary_artist"]["name"].encode('ascii', 'ignore')
             break
+    #it looked like the strings were in bitwise format so I decoded them
     if song_info:
+        print(song_title.decode('utf-8'))
         song_api_path = song_info["result"]["api_path"]
-        return Song(lyrics_from_song_api_path(song_api_path), song_title, artist_name)
+        return Song(lyrics_from_song_api_path(song_api_path).decode('utf-8'), song_title.decode('utf-8'), artist_name.decode('utf-8'))
     else:
         return None
