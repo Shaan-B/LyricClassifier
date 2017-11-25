@@ -13,11 +13,11 @@ myLyrics = webscraper.getLyrics(song, artist)
 myLyrics.saveLyrics('music/' + song + '.txt')
 newLyrics = openLyrics('music/' + song + '.txt')
 
-print('Title:', newLyrics.getTitle())
-print('Artist:', newLyrics.getArtist())
-print('Lyrics:', newLyrics.simpleLyrics())
+#print('Title:', newLyrics.getTitle())
+#print('Artist:', newLyrics.getArtist())
+#print('Lyrics:', newLyrics.simpleLyrics())
 
-print(newLyrics.wordFrequencies())
+#print(newLyrics.wordFrequencies())
 
 #here are the labels, we will need to find a way to systemize labels in the future
 #labels should be a list that matches up 1-1 with the indices in data
@@ -31,8 +31,8 @@ num_classes = 4
 onehotLabels = oneHotEncoder(num_classes, labels)
 
 data = vectorize(getMusicList())
-print("data[0]: ", data.tolist()[0])
-print("onehotLabels: ", onehotLabels)
+#print("data[0]: ", data.tolist()[0])
+#print("onehotLabels: ", onehotLabels)
 
 
 
@@ -43,4 +43,4 @@ print("onehotLabels: ", onehotLabels)
 model = modelBuilder(len(data.tolist()[0]),num_classes)
 
 # Start training (apply gradient descent algorithm)
-model.fit(data, onehotLabels, n_epoch=1000, batch_size=3, show_metric=True)
+model.fit(data, onehotLabels, n_epoch=100, batch_size=3, show_metric=True)

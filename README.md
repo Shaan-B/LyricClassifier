@@ -1,2 +1,2 @@
 # cowsthattype
-A Deep Learning Approach to Genre Clasification
+A Deep Learning Approach to Genre Classification

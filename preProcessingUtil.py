@@ -49,7 +49,7 @@ def vectorize(tokenizedList):
     print(tfidfVectorizer.get_feature_names())
     return vector
 
-print("vetorized POS: ", vectorize(lyrics2POS(getMusicList())))
+#print("vetorized POS: ", vectorize(lyrics2POS(getMusicList())))
 
 
 def preProcess(songs):
