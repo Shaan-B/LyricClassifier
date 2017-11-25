@@ -23,7 +23,9 @@ def lyrics_from_song_api_path(song_api_path):
     lyrics = html.find("div", class_ = "lyrics").get_text() #updated css where the lyrics are based in HTML
     return lyrics.encode('ascii', 'ignore')
 
-def getLyrics(song_title='', artist_name =''):
+def getSong(song_title='', artist_name ='', genres = [], notfound = 'ignore'):
+#Returns Song object based on the search results for the song title,
+#choosing the first result with the artist_name in the full artist string
     search_url = base_url + "/search"
     params = {'q': song_title + " " + artist_name}
     response = requests.get(search_url, params=params, headers=headers)
@@ -37,6 +39,6 @@ def getLyrics(song_title='', artist_name =''):
             break
     if song_info:
         song_api_path = song_info["result"]["api_path"]
-        return Song(lyrics_from_song_api_path(song_api_path), song_title, artist_name)
+        return Song(lyrics_from_song_api_path(song_api_path), genres, song_title, artist_name, notfound)
     else:
         return None

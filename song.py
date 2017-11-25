@@ -1,16 +1,41 @@
+import spotifyclient
+
+GENRES = {
+'pop': 'POP',
+'rap': 'RAP',
+'rock': 'RCK',
+'r&b': 'RNB',
+'country': 'CNT',
+'edm': 'EDM',
+'latin': 'LTN',
+'jazz': 'JZZ',
+}
+
 class Song(object):
     """
     Object containing the lyrics to a single song
     Attributes:
             lyrics: string containing song lyrics
+            genres: list containing genres
             title: string containing song title (optional)
             artist: string containing primary artist (optional)
     """
 
-    def __init__(self, lyrics, title='', artist=''):
+    def __init__(self, lyrics, genres=[], title='', artist='', notfound='ignore'):
+    #Constructor takes in local variables and option if genre is not found thru Spotify client
         self.lyrics = lyrics
         self.title = title.replace('\n', '')
         self.artist = artist.replace('\n', '')
+        self.genres = genres if notfound=='add' else []
+        if len(genres)==0 or notfound=='add':
+            artistgenres = spotifyclient.getArtistGenres(self.artist, GENRES.keys())
+            if artistgenres:
+                for g in artistgenres:
+                    self.genres.append(g)
+            elif notfound == 'prompt':
+                genres = raw_input('Genres not found, please input: ').split(',')
+                if len(genres) > 0:
+                    self.genres = genres
 
     def getLyrics(self, f=None):
         return self.lyrics
