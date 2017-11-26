@@ -48,7 +48,7 @@ import loadsongs
 
 
 
-#loadsongs.save('songlist.txt', 'songs')
+loadsongs.save('songlist.txt', 'songs')
 s = loadsongs.load('songs')
 
 #NOTE:song.title return artist information please fix

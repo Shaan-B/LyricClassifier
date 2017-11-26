@@ -24,22 +24,24 @@ class Song(object):
             artist: string containing primary artist (optional)
     """
 
-    def __init__(self, lyrics, genres=[], title='', artist='', notfound='ignore'):
+    def __init__(self, lyrics, title='', artist='', notfound='ignore'):
     #Constructor takes in local variables and option if genre is not found thru Spotify client
         self.lyrics = lyrics
         self.title = title.replace('\n', '')
         self.artist = artist.replace('\n', '')
         self.genres = genres if notfound=='add' else []
-        if len(genres)==0 or notfound=='add':
-            print('doing it')
-            artistgenres = spotifyclient.getArtistGenres(self.artist, GENRES.keys())
-            if artistgenres:
-                for g in artistgenres:
-                    self.genres.append(g)
-            elif notfound == 'prompt':
-                genres = raw_input('Genres not found, please input: ').split(',')
-                if len(genres) > 0:
-                    self.genres = genres
+        #if (len(genres)==0) or notfound=='add':
+        print('doing it')
+        print(self.artist)
+        artistgenres = spotifyclient.getArtistGenres(self.artist, GENRES.keys())
+        print(artistgenres)
+        if artistgenres:
+            for g in artistgenres:
+                self.genres.append(g)
+        elif notfound == 'prompt':
+            genres = raw_input('Genres not found, please input: ').split(',')
+            if len(genres) > 0:
+                self.genres = genres
 
     def tokens(self):
         return word_tokenize(self.simpleLyrics())

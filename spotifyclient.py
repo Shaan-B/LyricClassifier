@@ -24,10 +24,13 @@ def getArtistGenres(artist_name, genres):
     matches = []
 
     for genre in artist['genres']:
-        genre = genre.encode('ascii', 'ignore')
+        print(genre)
+        #genre = genre.encode('ascii', 'ignore')
         if genre in genres:
             matches.append(genre)
 
     if len(matches) == 0:
         return None
+
+    print("matches: ", matches)
     return matches
