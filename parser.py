@@ -5,5 +5,5 @@ from nltk.tag import pos_tag_sents
 brown_ic = wordnet_ic.ic('ic-brown.dat')
 
 moneymitch = open('music/moneymitch.txt')
-for i in moneymitch.readlines():
-    print (i)
+# for i in moneymitch.readlines():
+#     print (i)

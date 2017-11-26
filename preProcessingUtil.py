@@ -46,7 +46,7 @@ def lyrics2POS(songs):
 def vectorize(tokenizedList):
     tfidfVectorizer = TfidfVectorizer(ngram_range=(1, 1), stop_words='english', analyzer='word')
     vector = tfidfVectorizer.fit_transform(tokenizedList).todense()
-    print(tfidfVectorizer.get_feature_names())
+    #print(tfidfVectorizer.get_feature_names())
     return vector
 
 #print("vetorized POS: ", vectorize(lyrics2POS(getMusicList())))
@@ -73,4 +73,4 @@ def preProcess(songs):
            # print(words)
             #print("clean words: ", cleanWords)
 
-preProcess(getMusicList())
+#preProcess(getMusicList())

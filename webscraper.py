@@ -23,7 +23,9 @@ def lyrics_from_song_api_path(song_api_path):
     lyrics = html.find("div", class_ = "lyrics").get_text() #updated css where the lyrics are based in HTML
     return lyrics.encode('ascii', 'ignore')
 
-def getLyrics(song_title='', artist_name =''):
+def getSong(song_title='', artist_name ='', genres = [], notfound = 'ignore'):
+#Returns Song object based on the search results for the song title,
+#choosing the first result with the artist_name in the full artist string
     search_url = base_url + "/search"
     params = {'q': song_title + " " + artist_name}
     response = requests.get(search_url, params=params, headers=headers)
@@ -37,7 +39,7 @@ def getLyrics(song_title='', artist_name =''):
             break
     #it looked like the strings were in bitwise format so I decoded them
     if song_info:
-        print(song_title.decode('utf-8'))
+        #print(song_title.decode('utf-8'))
         song_api_path = song_info["result"]["api_path"]
         return Song(lyrics_from_song_api_path(song_api_path).decode('utf-8'), song_title.decode('utf-8'), artist_name.decode('utf-8'))
     else:
