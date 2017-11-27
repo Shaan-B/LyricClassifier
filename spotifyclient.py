@@ -15,7 +15,6 @@ def getArtistGenres(artist_name, genres):
     client_credentials_manager = SpotifyClientCredentials(clientid, secret)
     sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
     sp.trace=False
-
     results = sp.search(q=artist_name, limit=1, type='artist')
     for i, t in enumerate(results['artists']['items']):
         uri = t['uri']
@@ -24,7 +23,7 @@ def getArtistGenres(artist_name, genres):
     matches = []
 
     for genre in artist['genres']:
-        genre = genre.encode('ascii', 'ignore')
+        genre = genre
         if genre in genres:
             matches.append(genre)
 

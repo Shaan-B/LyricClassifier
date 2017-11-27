@@ -10,7 +10,7 @@ def save(listfile, destinationfolder):
 #   song3, artist3, notfound
 #   etc.
 #and loads them into pkl files in the destination folder
-    try:
+    #try:
         f = open(listfile, 'r')
         contents = f.read()
         songs = contents.split('\n')
@@ -24,9 +24,9 @@ def save(listfile, destinationfolder):
             if s:
                 name = s.title.replace(' ', '') + '.pkl'
                 s.saveSong(name, destinationfolder)
-    except Exception as e:
-        print 'Somthing went wrong...'
-        print e
+    # except Exception as e:
+    #     print('Somthing went wrong...')
+    #     print(e)
 
 def load(folder):
 #Takes in a folder and returns a list of Song objects from the .pkl files it contains
@@ -37,8 +37,8 @@ def load(folder):
                 songs.append(Song.openSong(os.path.join(folder, f)))
         return songs
     except Exception as e:
-        print 'Somthing went wrong...'
-        print e
+        print('Somthing went wrong...')
+        print(e)
 
 if __name__ == '__main__':
     path = None

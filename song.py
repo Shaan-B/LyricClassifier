@@ -1,5 +1,5 @@
 import spotifyclient
-import cPickle as pickle
+import _pickle as pickle
 from nltk.tokenize import word_tokenize
 import os
 
@@ -31,7 +31,7 @@ class Song(object):
         self.artist = artist.replace('\n', '')
         self.genres = genres if notfound=='add' else []
         if len(genres)==0 or notfound=='add':
-            artistgenres = spotifyclient.getArtistGenres(self.artist, GENRES.keys())
+            artistgenres = spotifyclient.getArtistGenres(self.artist, GENRES)
             if artistgenres:
                 for g in artistgenres:
                     self.genres.append(g)
