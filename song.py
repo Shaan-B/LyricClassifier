@@ -3,16 +3,16 @@ import cPickle as pickle
 from nltk.tokenize import word_tokenize
 import os
 
-GENRES = {
-'pop': 'POP',
-'rap': 'RAP',
-'rock': 'RCK',
-'r&b': 'RNB',
-'country': 'CNT',
-'edm': 'EDM',
-'latin': 'LTN',
-'jazz': 'JZZ',
-}
+GENRES = [
+'pop',
+'rap',
+'rock',
+'r&b',
+'country',
+'edm',
+'latin',
+'jazz'
+]
 
 class Song(object):
     """

@@ -5,3 +5,4 @@ s = loadsongs.load('songs')
 
 for e in s:
     print e.title
+    
