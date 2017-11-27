@@ -1,3 +1,4 @@
+"""
 import loadsongs
 
 loadsongs.save('songlist.txt', 'songs')
@@ -12,3 +13,8 @@ for e in s:
     print(e.tokens())
     print(e.simpleLyrics())
     print(e.tokenFrequencies())
+"""
+
+import webscraper
+
+print(webscraper.getSong('smoke filled room', 'mako').simpleLyrics())

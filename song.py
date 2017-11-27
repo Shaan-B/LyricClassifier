@@ -45,22 +45,21 @@ class Song(object):
 
     def  simpleLyrics(self):
     #Removes "[Chorus]", "[Verse X]", etc., punctuation, and newlines
-        i = 0
         lyrics = self.lyrics.lower()
-        removeChars = '\n'
+        i = 0
+        allowedChars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ '
+        simpleLyrics = ''
         while i < len(lyrics): #I think this is bad practice. w/e
             c = lyrics[i]
-            if c in removeChars:
-                lyrics = lyrics[:i] + ' ' + lyrics[i+1:]
+            if c in allowedChars:
+                simpleLyrics += c
             elif c=='[':
-                j = 1
-                while lyrics[i+j]!=']':
-                    j += 1
-                if j<50: #Safety check in case bracket isn't matched
-                    lyrics = lyrics[:i]+lyrics[i+j+1:]
-            else:
-                i+=1
-        return lyrics
+                while lyrics[i]!=']':
+                    i +=1
+            elif c in '\n\t':
+                simpleLyrics += ' '
+            i+=1
+        return simpleLyrics
 
     def tokenFrequencies(self):
     #Takes in a string of song lyrics and returns a dictionary containing

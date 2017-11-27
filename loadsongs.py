@@ -23,6 +23,7 @@ def save(listfile, destinationfolder):
                 s = webscraper.getSong(items[0], items[1], items[2], items[3:])
             if s:
                 name = s.title.replace(' ', '') + '.pkl'
+                if exists(
                 s.saveSong(name, destinationfolder)
     # except Exception as e:
     #     print('Somthing went wrong...')
