@@ -22,7 +22,11 @@ def save(listfile, destinationfolder):
             elif len(items) > 2:
                 s = webscraper.getSong(items[0], items[1], items[2], items[3:])
             if s:
-                name = s.title.replace(' ', '')
+                namecopy = s.title.replace(' ', '')
+                name = ''
+                for c in namecopy:
+                    if c in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ":
+                        name += c
                 i = 1
                 while os.path.isfile(os.path.join(destinationfolder, name+'.pkl')):
                     name += str(i)

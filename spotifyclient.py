@@ -27,7 +27,6 @@ def getArtistGenres(artist_name, genres):
     matches = []
 
     for genre in artist['genres']:
-        genre = genre
         if genre in genres:
             matches.append(genre)
 

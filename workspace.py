@@ -1,43 +1,26 @@
-"""
+import webscraper
+import requests
 import loadsongs
 
-loadsongs.save('songlist.txt', 'songs')
-s = loadsongs.load('songs')
+"""
+song_title = 'The 500 Greatest Albums of All Time'
+artist_name = 'Rolling'
 
-print(len(s))
-
-for e in s:
-    print(e.title, type(e.title))
-    print(e.artist, type(e.artist))
-    print(e.lyrics, type(e.lyrics))
-    print(e.tokens())
-    print(e.simpleLyrics())
-    print(e.tokenFrequencies())
+search_url = webscraper.base_url + "/search"
+params = {'q': song_title + " " + artist_name}
+response = requests.get(search_url, params=params, headers=webscraper.headers)
+json = response.json()
+for hit in json["response"]["hits"]:
+    if artist_name.lower() in hit["result"]["primary_artist"]["name"].lower(): #requires artist_name is substring of Genius's artist name
+        print(hit["result"]["api_path"])
+        break
 """
 
-import spotifyclient
-from spotipy.oauth2 import SpotifyClientCredentials
-import json
-import spotipy
-import time
-import sys
-import pprint
-
-clientid = '80c0be28d7c244148044c27a87653074'
-secret = '3b7ff2e371174bd8891b51744c06488f'
-
-client_credentials_manager = SpotifyClientCredentials(clientid, secret)
-sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
-sp.trace=False
-
-results = sp.search(q='DAMN', limit = 1, type='album')
-
-for i, t in enumerate(results['albums']['items']):
-    uri = t['uri']
-
-album = sp.album(uri)
+l = loadsongs.load('testsongs')
+print(l[0].title)
+print(l[0].artist)
+print(l[0].lyrics)
+print(l[0].genres)
 
 
-print(album)
-
-print (album['genres'])
+#TODO: say that a song is only pop if it doesn't fit any other genre
