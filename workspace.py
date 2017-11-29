@@ -2,6 +2,7 @@ import webscraper
 import requests
 import loadsongs
 import loaddata
+import song
 
 """
 song_title = 'The 500 Greatest Albums of All Time'
@@ -17,7 +18,11 @@ for hit in json["response"]["hits"]:
         break
 """
 
-print(len(loaddata.getAlbumTracks('Yeezus', 'ye')))
+#print(len(loaddata.getAlbumTracks('Yeezus', 'ye')))
 
 
 #TODO: say that a song is only pop if it doesn't fit any other genre
+
+
+rs500 = loaddata.getRS500()
+print(rs500[''])

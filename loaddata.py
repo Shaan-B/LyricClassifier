@@ -27,6 +27,7 @@ def getRS500():
         j = line.index('(') - 1
         title = line[i:j]
         if title == 'The Beatles': title = 'White Album' #It's easier to do this
+        elif len(title) == 0: title = 'Pronounced Leh-Nerd Skin-Nerd'
         i = line.index(' by ') + len(' by ')
         artist = line[i:]
         albums[title] = artist
@@ -84,44 +85,47 @@ def loaddata(destinationfolder, songlist, logfile):
     for album in rs500:
         print(album)
         log.write(album+'\n')
-        print('\tGetting track list...')
-        log.write('\tGetting track list...\n')
-        artistwords = rs500[album].split(' ')
-        artistwords = lensort(artistwords)
-        for word in artistwords:
-            tracks = getAlbumTracks(album, rs500[album])
-            if tracks:
-                fragment = word
-                break
-        if not tracks:
-            print('\tNot found.')
-            log.write('\tNot found.\n')
-            continue
-        print('\tSaving...')
-        log.write('\tSaving...\n')
-        f = open(songlist, 'w+')
-        dropped = 0
-        for track in tracks:
-            try:
-                namecopy = track.title.replace(' ', '')
-                name = ''
-                for c in namecopy:
-                    if c in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ":
-                        name += c
-                i = 1
-                while os.path.isfile(os.path.join(destinationfolder, name+'.pkl')):
-                    name += str(i)
-                    i += 1
-                track.saveSong(name+'.pkl', destinationfolder)
-                f.write(track.title + ', ' + fragment if fragment else rs500[album] + '\n')
-                num_tracks += 1
-            except Exception:
-                dropped += 1
-        if dropped>0:
-            print('\tDropped', dropped, 'tracks, out of', len(tracks))
-            log.write('\tDropped ' + str(dropped) + ' tracks, out of ' + str(len(tracks)) + '\n')
-        print('\tDone.')
-        log.write('\tDone.\n')
+        try:
+            print('\tGetting track list...')
+            log.write('\tGetting track list...\n')
+            artistwords = rs500[album].split(' ')
+            artistwords = lensort(artistwords)
+            for word in artistwords:
+                tracks = getAlbumTracks(album, rs500[album])
+                if tracks:
+                    fragment = word
+                    break
+            if not tracks:
+                print('\tNot found.')
+                log.write('\tNot found.\n')
+                continue
+            print('\tSaving...')
+            log.write('\tSaving...\n')
+            f = open(songlist, 'w+')
+            dropped = 0
+            for track in tracks:
+                try:
+                    namecopy = track.title.replace(' ', '')
+                    name = ''
+                    for c in namecopy:
+                        if c in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890":
+                            name += c
+                    i = 1
+                    while os.path.isfile(os.path.join(destinationfolder, name+'.pkl')):
+                        name += str(i)
+                        i += 1
+                    track.saveSong(name+'.pkl', destinationfolder)
+                    f.write(track.title + ', ' + fragment if fragment else rs500[album] + '\n')
+                    num_tracks += 1
+                except Exception:
+                    dropped += 1
+            if dropped>0:
+                print('\tDropped', dropped, 'tracks, out of', len(tracks))
+                log.write('\tDropped ' + str(dropped) + ' tracks, out of ' + str(len(tracks)) + '\n')
+            print('\tDone.')
+            log.write('\tDone.\n')
+        except Exception:
+            print('\tSomething\'s wrong with that album...')
     print('Saved', num_tracks, 'tracks.')
     log.write('Saved ' + str(num_tracks) + ' tracks.\n')
     log.close()
