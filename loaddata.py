@@ -60,7 +60,8 @@ def loaddata(destinationfolder, songlist):
 #Writes songs to .pkl file and stores their metadata in songlist
     num_tracks = 0
 
-    rs500 = {'Yeezus': 'Kanye West', 'DAMN': 'Kendrick Lamar', '4 Your Eyez Only': 'J. Cole'}
+    #rs500 = {'Yeezus': 'Kanye West', 'DAMN': 'Kendrick Lamar', '4 Your Eyez Only': 'J. Cole'}
+    rs500 = getRS500()
     for album in rs500:
         print(album)
         print('\tGetting track list...')
@@ -92,4 +93,4 @@ def loaddata(destinationfolder, songlist):
     print('Saved', num_tracks, 'tracks')
 
 if __name__=='__main__':
-    loaddata('testsongs', 'testssonglist.txt')
+    loaddata('rs500', 'rs500.txt')
