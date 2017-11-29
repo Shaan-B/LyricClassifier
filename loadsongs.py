@@ -25,7 +25,7 @@ def save(listfile, destinationfolder):
                 namecopy = s.title.replace(' ', '')
                 name = ''
                 for c in namecopy:
-                    if c in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ":
+                    if c in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890":
                         name += c
                 i = 1
                 while os.path.isfile(os.path.join(destinationfolder, name+'.pkl')):

@@ -1,8 +1,4 @@
-import webscraper
-import requests
-import loadsongs
-import loaddata
-import song
+
 
 """
 song_title = 'The 500 Greatest Albums of All Time'
@@ -24,5 +20,14 @@ for hit in json["response"]["hits"]:
 #TODO: say that a song is only pop if it doesn't fit any other genre
 
 
-rs500 = loaddata.getRS500()
-print(rs500[''])
+larkin = open('Larkin1000Albums.txt')
+contents = larkin.read()
+new = ''
+for i in range(len(contents)):
+    c = contents[i]
+    if c in 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890. \n':
+        new += c
+    elif contents[i-2]==' ' and contents[i+2]==' ':
+        new += '-'
+newlarkin = open('Larkin1000.txt', 'w+')
+newlarkin.write(new)

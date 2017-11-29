@@ -33,6 +33,14 @@ def getRS500():
         albums[title] = artist
     return albums
 
+def getLarkin1000():
+#Returns a dictionary of album: artist pairs
+    f = open('Larkin1000Albums.txt')
+    lines = f.readlines()
+
+    for line in lines:
+        i=0
+
 def getAlbumTracks(album, artist):
 #Takes in an album/artist pair and returns a list of Song objects
 #Requires artist to be an exact substring of Spotify's data
