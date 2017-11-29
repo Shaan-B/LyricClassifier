@@ -15,6 +15,29 @@ for e in s:
     print(e.tokenFrequencies())
 """
 
-import webscraper
+import spotifyclient
+from spotipy.oauth2 import SpotifyClientCredentials
+import json
+import spotipy
+import time
+import sys
+import pprint
 
-print(webscraper.getSong('smoke filled room', 'mako').simpleLyrics())
+clientid = '80c0be28d7c244148044c27a87653074'
+secret = '3b7ff2e371174bd8891b51744c06488f'
+
+client_credentials_manager = SpotifyClientCredentials(clientid, secret)
+sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+sp.trace=False
+
+results = sp.search(q='DAMN', limit = 1, type='album')
+
+for i, t in enumerate(results['albums']['items']):
+    uri = t['uri']
+
+album = sp.album(uri)
+
+
+print(album)
+
+print (album['genres'])

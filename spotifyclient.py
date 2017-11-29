@@ -16,8 +16,12 @@ def getArtistGenres(artist_name, genres):
     sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
     sp.trace=False
     results = sp.search(q=artist_name, limit=1, type='artist')
+    uri = None
     for i, t in enumerate(results['artists']['items']):
         uri = t['uri']
+
+    if not uri:
+        return None
 
     artist = sp.artist(uri)
     matches = []
