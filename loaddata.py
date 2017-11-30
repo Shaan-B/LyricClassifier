@@ -73,8 +73,16 @@ def getAlbumTracks(album, artist):
             name = name[:name.index('-')]
         if name not in tracknames:
             tracknames.append(name)
+    return tracknames
+
+def getSongLyrics(tracknames, artist, f=None):
     songs = []
     for track in tracknames:
+        if not track:
+            continue
+        if f:
+            print('\t\tGetting ' + track + '...')
+            f.write('\t\tGetting ' + track + '...\n')
         songs.append(webscraper.getSong(track, artist))
     return songs
 
@@ -89,7 +97,7 @@ def lensort(a):
                 a[j] = temp
     return a
 
-def loaddata(destinationfolder, songlist, logfile, oldlist=[]):
+def loaddata(destinationfolder, songlist, logfile):
 #Writes songs to .pkl file and stores their metadata in songlist
 #Requires a log file for now. TODO: Don't require a log file
     num_tracks = 0
@@ -99,6 +107,7 @@ def loaddata(destinationfolder, songlist, logfile, oldlist=[]):
     #albums = getRS500()
     albums = getLarkin1000()
     f = open(songlist, 'w+')
+    d = open('dropped.txt', 'w+')
     for album in albums:
         print(album)
         log.write(album+'\n')
@@ -110,8 +119,10 @@ def loaddata(destinationfolder, songlist, logfile, oldlist=[]):
             for word in artistwords:
                 tracks = getAlbumTracks(album, albums[album])
                 if tracks:
+                    print('\tFinding song lyrics...')
+                    log.write('\tFinding song lyrics...\n')
+                    tracks = getSongLyrics(tracks, word, log)
                     fragment = word
-                    break
             if not tracks:
                 print('\tNot found.')
                 log.write('\tNot found.\n')
@@ -141,6 +152,7 @@ def loaddata(destinationfolder, songlist, logfile, oldlist=[]):
             log.write('\tDone.\n')
         except Exception:
             print('\tSomething\'s wrong with that album...')
+            d.write(album + ', ' + albums[album] + '\n')
     print('Saved', num_tracks, 'tracks.')
     log.write('Saved ' + str(num_tracks) + ' tracks.\n')
     log.close()
@@ -148,4 +160,4 @@ def loaddata(destinationfolder, songlist, logfile, oldlist=[]):
 
 if __name__=='__main__':
     #loaddata('rs500', 'rs500.txt', 'rs500.log')
-    loaddata('larkin1000', 'LarkinSongs.txt', 'Larkin1000.log')
+    loaddata('testlarkin1000', 'testLarkinSongs.txt', 'testLarkin1000.log')
