@@ -20,14 +20,9 @@ for hit in json["response"]["hits"]:
 #TODO: say that a song is only pop if it doesn't fit any other genre
 
 
-larkin = open('Larkin1000Albums.txt')
-contents = larkin.read()
-new = ''
-for i in range(len(contents)):
-    c = contents[i]
-    if c in 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890. \n':
-        new += c
-    elif contents[i-2]==' ' and contents[i+2]==' ':
-        new += '-'
-newlarkin = open('Larkin1000.txt', 'w+')
-newlarkin.write(new)
+
+newlarkin = open('Larkin1000.txt', 'r')
+lines = newlarkin.readlines()
+for line in lines:
+    if ' - ' not in line:
+        print(line)

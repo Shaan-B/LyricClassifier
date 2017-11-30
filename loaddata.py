@@ -35,11 +35,15 @@ def getRS500():
 
 def getLarkin1000():
 #Returns a dictionary of album: artist pairs
-    f = open('Larkin1000Albums.txt')
+    f = open('Larkin1000.txt')
     lines = f.readlines()
-
+    albums = {}
     for line in lines:
-        i=0
+        nonum = line[line.index('. ')+2:]
+        items = nonum.split(' - ')
+        title = items[1].replace('\n', '')
+        albums[title] = items[0]
+    return albums
 
 def getAlbumTracks(album, artist):
 #Takes in an album/artist pair and returns a list of Song objects
@@ -88,18 +92,19 @@ def loaddata(destinationfolder, songlist, logfile):
     num_tracks = 0
     log=open(logfile, 'w+')
 
-    #rs500 = {'Yeezus': 'Kanye West', 'DAMN': 'Kendrick Lamar', '4 Your Eyez Only': 'J. Cole'}
-    rs500 = getRS500()
-    for album in rs500:
+    #albums = {'Yeezus': 'Kanye West', 'DAMN': 'Kendrick Lamar', '4 Your Eyez Only': 'J. Cole'}
+    #albums = getRS500()
+    albums = getLarkin1000()
+    for album in albums:
         print(album)
         log.write(album+'\n')
         try:
             print('\tGetting track list...')
             log.write('\tGetting track list...\n')
-            artistwords = rs500[album].split(' ')
+            artistwords = albums[album].split(' ')
             artistwords = lensort(artistwords)
             for word in artistwords:
-                tracks = getAlbumTracks(album, rs500[album])
+                tracks = getAlbumTracks(album, albums[album])
                 if tracks:
                     fragment = word
                     break
@@ -123,7 +128,7 @@ def loaddata(destinationfolder, songlist, logfile):
                         name += str(i)
                         i += 1
                     track.saveSong(name+'.pkl', destinationfolder)
-                    f.write(track.title + ', ' + fragment if fragment else rs500[album] + '\n')
+                    f.write(track.title + ', ' + fragment if fragment else albums[album] + '\n')
                     num_tracks += 1
                 except Exception:
                     dropped += 1
@@ -140,4 +145,5 @@ def loaddata(destinationfolder, songlist, logfile):
     f.close()
 
 if __name__=='__main__':
-    loaddata('rs500', 'rs500.txt', 'rs500.log')
+    #loaddata('rs500', 'rs500.txt', 'rs500.log')
+    loaddata('test', 'test.txt', 'test.log')
