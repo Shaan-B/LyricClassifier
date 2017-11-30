@@ -20,32 +20,33 @@ for hit in json["response"]["hits"]:
 #print(len(loaddata.getAlbumTracks('Yeezus', 'ye')))
 
 
+
 #TODO: say that a song is only pop if it doesn't fit any other genre
 
 import loaddata
-"""
-songs = loadsongs.load('oldRS500/rs500')
-print('Total number of songs:', len(songs))
-genrecounts = {}
-genrecountcounts = {}
-nogenre = 0
-for song in songs:
-    if len(song.genres) in genrecountcounts.keys():
-        genrecountcounts[len(song.genres)] += 1
-    else:
-        genrecountcounts[len(song.genres)] = 1
-    if len(song.genres) == 0:
-        print(song.title, song.artist)
-    for genre in song.genres:
-        if genre in genrecounts.keys():
-            genrecounts[genre] += 1
-        else:
-            genrecounts[genre] = 1
-for genre in genrecounts:
-    print(genre + ': ' + str(genrecounts[genre]))
-print()
-for count in genrecountcounts:
-    print(str(count) + ': ' + str(genrecountcounts[count]))
-"""
+import loadsongs
 
-print(loaddata.getAlbumTracks('No Secrets', 'Carly'))
+def genreDistribution(songs):
+    print('Total number of songs:', len(songs))
+    genrecounts = {}
+    genrecountcounts = {}
+    nogenre = 0
+    for song in songs:
+        if len(song.genres) in genrecountcounts.keys():
+            genrecountcounts[len(song.genres)] += 1
+        else:
+            genrecountcounts[len(song.genres)] = 1
+        for genre in song.genres:
+            if genre in genrecounts.keys():
+                genrecounts[genre] += 1
+            else:
+                genrecounts[genre] = 1
+    for genre in genrecounts:
+        print(genre + ': ' + str(genrecounts[genre]))
+    print()
+    print('Number of genres:')
+    for count in genrecountcounts:
+        print(str(count) + ': ' + str(genrecountcounts[count]))
+
+
+#print(loaddata.getAlbumTracks('No Secrets', 'Carly'))
