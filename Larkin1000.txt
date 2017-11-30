@@ -1,16 +1,16 @@
-1. Beatles  Revolver
-2. Radiohead  the Bends
-3. Beatles  Sgt Peppers Lonely Hearts Club Band
-4. Radiohead  OK Computer
-5. Beatles  Beatles White Album
-6. REM  Automatic for the People
+1. Beatles - Revolver
+2. Radiohead - the Bends
+3. Beatles - Sgt Peppers Lonely Hearts Club Band
+4. Radiohead - OK Computer
+5. Beatles - White Album
+6. REM - Automatic for the People
 7. Dylan Bob - Blood on the Tracks
 8. Beatles - Abbey Road
 9. Pink Floyd - Dark Side of the Moon
 10. Smiths - Queen is Dead
 11. Love - Forever Changes
 12. Stone Roses - Stone Roses
-13. Velvet Underground   Nico
+13. Velvet Underground  - Nico
 14. Davis Miles - Kind of Blue
 15. U2 - Unforgettable Fire
 16. Morrison Van - Astral Weeks
@@ -133,7 +133,7 @@
 133. Dylan Bob - Another Side of
 134. Smiths - Meat is Murder
 135. Primal Scream - Screamadelica
-136. Dr Dre  Chronic
+136. Dr Dre - Chronic
 137. Guns n Roses - Appetite for Destruction
 138. De la Soul - 3 Feet High and Rising
 139. REM - Green
@@ -406,7 +406,7 @@
 406. Incredible String Band - Hangmans Beautiful Daughter
 407. Blue Nile - A Walk Across the Rooftops
 408. Creed - My Own Prison
-409. Metallica  and Justice for All
+409. Metallica - and Justice for All
 410. Young Neil - Zuma
 411. Basie Count - Atomic Mr Basie
 412. Earle Steve - Copperhead Road
@@ -543,7 +543,7 @@
 543. Collective Soul - Collective Soul
 544. Judas Priest - Unleashed in the East
 545. Sinatra Frank - Nice n Easy
-546. New Order  Republic
+546. New Order - Republic
 547. Roxy Music - Stranded
 548. Ellington Duke - Ellington Indigos
 549. McGarrigle Kate  Anna - Kate  Anna McGarrigle
@@ -581,7 +581,7 @@
 581. Morrissey - Your Arsenal
 582. Newman Randy - Sail Away
 583. Bone Thugs  Harmony - E 1999 Eternal
-584. Morgan Lee  Sidewinder
+584. Morgan Lee - Sidewinder
 585. OConnor Sinad - I Do Not Want What I Have Not Got
 586. King BB - Live at the Regal
 587. Led Zeppelin - Song Remains the Same
@@ -602,7 +602,7 @@
 602. ACDC - For Those About to Rock We Salute You
 603. Roxy Music - For Your Pleasure
 604. Thompson Richard  Linda - Hokey Pokey
-605. Zappa Frank - Apostrophe 
+605. Zappa Frank - Apostrophe
 606. Family - Music in a Dolls House
 607. Jefferson Airplane - Volunteers
 608. Silver Horace Quintet - Song for My Father

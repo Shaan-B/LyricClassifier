@@ -35,6 +35,7 @@ def getRS500():
 
 def getLarkin1000():
 #Returns a dictionary of album: artist pairs
+#Sourced from: http://www.rocklistmusic.co.uk/virgin_1000_v3.htm
     f = open('Larkin1000.txt')
     lines = f.readlines()
     albums = {}

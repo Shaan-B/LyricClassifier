@@ -1,0 +1,11 @@
+Getting data:
+
+Criteria:
+  - Needed a large amount of songs
+  - Data should be evenly/realistically distributed among genres
+  - Solution: Best albums lists (more bang for buck)
+
+Implementation difficulties:
+  - Process is slow b/c extensive use of online APIs
+  - Text parsing difficulties
+  - Most albums are classic, so APIs return deluxe/rare editions
