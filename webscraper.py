@@ -21,7 +21,7 @@ def lyrics_from_song_api_path(song_api_path):
     #remove script tags that they put in the middle of the lyrics[h.extract() for h in html('script')]
     #at least Genius is nice and has a tag called 'lyrics'!
     lyrics = html.find("div", class_ = "lyrics").get_text() #updated css where the lyrics are based in HTML
-    return lyrics.encode('ascii', 'ignore')
+    return lyrics
 
 def getSong(song_title='', artist_name ='', genres = [], notfound = 'ignore'):
 #Returns Song object based on the search results for the song title,
@@ -34,13 +34,16 @@ def getSong(song_title='', artist_name ='', genres = [], notfound = 'ignore'):
     for hit in json["response"]["hits"]:
         if artist_name.lower() in hit["result"]["primary_artist"]["name"].lower(): #requires artist_name is substring of Genius's artist name
             song_info = hit
-            song_title = hit["result"]["title"].encode('ascii', 'ignore')
-            artist_name = hit["result"]["primary_artist"]["name"].encode('ascii', 'ignore')
+            song_title = hit["result"]["title"]
+            artist_name = hit["result"]["primary_artist"]["name"]
             break
     #it looked like the strings were in bitwise format so I decoded them
     if song_info:
         #print(song_title.decode('utf-8'))
         song_api_path = song_info["result"]["api_path"]
-        return Song(lyrics_from_song_api_path(song_api_path).decode('utf-8'), song_title.decode('utf-8'), artist_name.decode('utf-8'))
+# <<<<<<< HEAD
+#         return Song(lyrics_from_song_api_path(song_api_path).decode('utf-8'), song_title.decode('utf-8'), artist_name.decode('utf-8'))
+# =======
+        return Song(lyrics_from_song_api_path(song_api_path), genres, str(song_title), str(artist_name), notfound)
     else:
         return None

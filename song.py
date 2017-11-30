@@ -3,16 +3,16 @@ import _pickle as pickle
 from nltk.tokenize import word_tokenize
 import os
 
-GENRES = {
-'pop': 'POP',
-'rap': 'RAP',
-'rock': 'RCK',
-'r&b': 'RNB',
-'country': 'CNT',
-'edm': 'EDM',
-'latin': 'LTN',
-'jazz': 'JZZ',
-}
+GENRES = [
+'pop',
+'rap',
+'rock',
+'r&b',
+'country',
+'edm',
+'latin',
+'jazz'
+]
 
 class Song(object):
     """
@@ -29,42 +29,54 @@ class Song(object):
         self.lyrics = lyrics
         self.title = title.replace('\n', '')
         self.artist = artist.replace('\n', '')
-        self.genres = []
-        #if (len(genres)==0) or notfound=='add':
-    #    print('doing it')
-        #print(self.artist)
-        artistgenres = spotifyclient.getArtistGenres(self.artist, GENRES.keys())
-        print("tetsing here: ", artistgenres)
-        self.genres = artistgenres
-        # if artistgenres:
-        #     for g in artistgenres:
-        #         self.genres.append(g)
-        # elif notfound == 'prompt':
-        #     genres = raw_input('Genres not found, please input: ').split(',')
-        #     if len(genres) > 0:
-        #         self.genres = genres
+#=======
+    #     self.genres = []
+    #     #if (len(genres)==0) or notfound=='add':
+    # #    print('doing it')
+    #     #print(self.artist)
+    #     artistgenres = spotifyclient.getArtistGenres(self.artist, GENRES.keys())
+    #     print("tetsing here: ", artistgenres)
+    #     self.genres = artistgenres
+    #     # if artistgenres:
+    #     #     for g in artistgenres:
+    #     #         self.genres.append(g)
+    #     # elif notfound == 'prompt':
+    #     #     genres = raw_input('Genres not found, please input: ').split(',')
+    #     #     if len(genres) > 0:
+    #     #         self.genres = genres
+#=======
+        self.genres = genres if notfound=='add' else []
+        if len(genres)==0 or notfound=='add':
+            artistgenres = spotifyclient.getArtistGenres(self.artist, GENRES)
+            if artistgenres:
+                for g in artistgenres:
+                    self.genres.append(g)
+            elif notfound == 'prompt':
+                genres = raw_input('Genres not found, please input: ').split(',')
+                if len(genres) > 0:
+                    self.genres = genres
+
 
     def tokens(self):
         return word_tokenize(self.simpleLyrics())
 
     def  simpleLyrics(self):
     #Removes "[Chorus]", "[Verse X]", etc., punctuation, and newlines
-        i = 0
         lyrics = self.lyrics.lower()
-        removeChars = '\n'
+        i = 0
+        allowedChars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ '
+        simpleLyrics = ''
         while i < len(lyrics): #I think this is bad practice. w/e
             c = lyrics[i]
-            if c in removeChars:
-                lyrics = lyrics[:i] + ' ' + lyrics[i+1:]
+            if c in allowedChars:
+                simpleLyrics += c
             elif c=='[':
-                j = 1
-                while lyrics[i+j]!=']':
-                    j += 1
-                if j<50: #Safety check in case bracket isn't matched
-                    lyrics = lyrics[:i]+lyrics[i+j+1:]
-            else:
-                i+=1
-        return lyrics
+                while lyrics[i]!=']':
+                    i +=1
+            elif c in '\n\t':
+                simpleLyrics += ' '
+            i+=1
+        return simpleLyrics
 
     def tokenFrequencies(self):
     #Takes in a string of song lyrics and returns a dictionary containing

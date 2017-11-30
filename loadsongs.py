@@ -10,7 +10,7 @@ def save(listfile, destinationfolder):
 #   song3, artist3, notfound
 #   etc.
 #and loads them into pkl files in the destination folder
-    try:
+    #try:
         f = open(listfile, 'r')
         contents = f.read()
         songs = contents.split('\n')
@@ -22,11 +22,24 @@ def save(listfile, destinationfolder):
             elif len(items) > 2:
                 s = webscraper.getSong(items[0], items[1], items[2], items[3:])
             if s:
-                name = s.title.replace(' ', '') + '.pkl'
-                s.saveSong(name, destinationfolder)
-    except Exception as e:
-        print ('Somthing went wrong...')
-        print (e)
+    #             name = s.title.replace(' ', '') + '.pkl'
+    #             s.saveSong(name, destinationfolder)
+    # except Exception as e:
+    #     print ('Somthing went wrong...')
+    #     print (e)
+                namecopy = s.title.replace(' ', '')
+                name = ''
+                for c in namecopy:
+                    if c in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890":
+                        name += c
+                i = 1
+                while os.path.isfile(os.path.join(destinationfolder, name+'.pkl')):
+                    name += str(i)
+                    i += 1
+                s.saveSong(name+'.pkl', destinationfolder)
+    # except Exception as e:
+    #     print('Somthing went wrong...')
+    #     print(e)
 
 def load(folder):
 #Takes in a folder and returns a list of Song objects from the .pkl files it contains
@@ -37,8 +50,8 @@ def load(folder):
                 songs.append(Song.openSong(os.path.join(folder, f)))
         return songs
     except Exception as e:
-        print ('Somthing went wrong...')
-        print (e)
+        print('Somthing went wrong...')
+        print(e)
 
 if __name__ == '__main__':
     path = None
