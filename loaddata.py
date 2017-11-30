@@ -55,11 +55,13 @@ def getAlbumTracks(album, artist):
     sp.trace=False
     results = sp.search(q=album, limit=1, type='album')
     uri = None
+    artistwords = artist.split(' ')
     for i, t in enumerate(results['albums']['items']):
         for a in t['artists']:
-            if artist in a['name']:
-                uri= t
-                break
+            for artistword in artistwords:
+                if artistword in a['name']:
+                    uri= t
+                    break
     if not uri:
         return None
     item = sp.album(t['uri'])
@@ -87,7 +89,7 @@ def lensort(a):
                 a[j] = temp
     return a
 
-def loaddata(destinationfolder, songlist, logfile):
+def loaddata(destinationfolder, songlist, logfile, oldlist=[]):
 #Writes songs to .pkl file and stores their metadata in songlist
 #Requires a log file for now. TODO: Don't require a log file
     num_tracks = 0
@@ -96,6 +98,7 @@ def loaddata(destinationfolder, songlist, logfile):
     #albums = {'Yeezus': 'Kanye West', 'DAMN': 'Kendrick Lamar', '4 Your Eyez Only': 'J. Cole'}
     #albums = getRS500()
     albums = getLarkin1000()
+    f = open(songlist, 'w+')
     for album in albums:
         print(album)
         log.write(album+'\n')
@@ -115,7 +118,6 @@ def loaddata(destinationfolder, songlist, logfile):
                 continue
             print('\tSaving...')
             log.write('\tSaving...\n')
-            f = open(songlist, 'w+')
             dropped = 0
             for track in tracks:
                 try:
@@ -129,12 +131,12 @@ def loaddata(destinationfolder, songlist, logfile):
                         name += str(i)
                         i += 1
                     track.saveSong(name+'.pkl', destinationfolder)
-                    f.write(track.title + ', ' + fragment if fragment else albums[album] + '\n')
+                    f.write(track.title + ', ' + (fragment if fragment else albums[album]) + '\n')
                     num_tracks += 1
                 except Exception:
                     dropped += 1
-            print('\t' + '*' if dropped>0 else ' ' + 'Dropped', dropped, 'tracks, out of', len(tracks))
-            log.write('\t' + '*' if dropped>0 else ' ' + 'Dropped ' + str(dropped) + ' tracks, out of ' + str(len(tracks)) + '\n')
+            print('\t' + ('*' if dropped>0 else '') + 'Dropped', dropped, 'tracks, out of', len(tracks))
+            log.write('\t' + ('*' if dropped>0 else '') + 'Dropped ' + str(dropped) + ' tracks, out of ' + str(len(tracks)) + '\n')
             print('\tDone.')
             log.write('\tDone.\n')
         except Exception:
@@ -146,4 +148,4 @@ def loaddata(destinationfolder, songlist, logfile):
 
 if __name__=='__main__':
     #loaddata('rs500', 'rs500.txt', 'rs500.log')
-    loaddata('larkin1000', 'Larkin1000.txt', 'Larkin1000.log')
+    loaddata('larkin1000', 'LarkinSongs.txt', 'Larkin1000.log')

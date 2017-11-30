@@ -22,7 +22,7 @@ for hit in json["response"]["hits"]:
 
 #TODO: say that a song is only pop if it doesn't fit any other genre
 
-
+import loaddata
 """
 songs = loadsongs.load('oldRS500/rs500')
 print('Total number of songs:', len(songs))
@@ -48,4 +48,4 @@ for count in genrecountcounts:
     print(str(count) + ': ' + str(genrecountcounts[count]))
 """
 
-print(spotifyclient.getArtistGenres('Kanye', song.GENRES))
+print(loaddata.getAlbumTracks('No Secrets', 'Carly'))
