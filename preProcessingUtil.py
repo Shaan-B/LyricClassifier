@@ -31,6 +31,7 @@ def getMusicList():
     for path in get_document_filenames():
         with open(path, 'r') as file:
             lyricList.append(file.read())
+    print("lyrics list: ", lyricList)
     return lyricList
 
 

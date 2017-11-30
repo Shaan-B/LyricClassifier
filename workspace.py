@@ -50,7 +50,23 @@ import loadsongs
 
 loadsongs.save('songlist.txt', 'songs')
 s = loadsongs.load('songs')
+def getLyrics(directory):
+    lyrics = []
+    labels = []
+    songs =  loadsongs.load(directory)
+    for song in songs:
+        print (song.genres)
+        lyrics.append(song.simpleLyrics())
+        labels.append(song.genres[0])
+
+    print("lyrics: ", lyrics)
+    print("labels: ", labels)
+    return lyrics, labels
+
+getLyrics('songs')
+
+#NOTE:we need to remove backslashes ann perentheses
 
 #NOTE:song.title return artist information please fix
 for e in s:
-    print (e.genres)
+    print ("genre testing: ", e.genres)

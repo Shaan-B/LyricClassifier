@@ -23,7 +23,7 @@ def getArtistGenres(artist_name, genres):
     artist = sp.artist(uri)
     matches = []
 
-    for genre in artist['genres']:
+    for genre in artist['genres'][::-1]:
         print(genre)
         #genre = genre.encode('ascii', 'ignore')
         if genre in genres:

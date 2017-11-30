@@ -29,19 +29,20 @@ class Song(object):
         self.lyrics = lyrics
         self.title = title.replace('\n', '')
         self.artist = artist.replace('\n', '')
-        self.genres = genres if notfound=='add' else []
+        self.genres = []
         #if (len(genres)==0) or notfound=='add':
-        print('doing it')
-        print(self.artist)
+    #    print('doing it')
+        #print(self.artist)
         artistgenres = spotifyclient.getArtistGenres(self.artist, GENRES.keys())
-        print(artistgenres)
-        if artistgenres:
-            for g in artistgenres:
-                self.genres.append(g)
-        elif notfound == 'prompt':
-            genres = raw_input('Genres not found, please input: ').split(',')
-            if len(genres) > 0:
-                self.genres = genres
+        print("tetsing here: ", artistgenres)
+        self.genres = artistgenres
+        # if artistgenres:
+        #     for g in artistgenres:
+        #         self.genres.append(g)
+        # elif notfound == 'prompt':
+        #     genres = raw_input('Genres not found, please input: ').split(',')
+        #     if len(genres) > 0:
+        #         self.genres = genres
 
     def tokens(self):
         return word_tokenize(self.simpleLyrics())
