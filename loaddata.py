@@ -133,9 +133,8 @@ def loaddata(destinationfolder, songlist, logfile):
                     num_tracks += 1
                 except Exception:
                     dropped += 1
-            if dropped>0:
-                print('\tDropped', dropped, 'tracks, out of', len(tracks))
-                log.write('\tDropped ' + str(dropped) + ' tracks, out of ' + str(len(tracks)) + '\n')
+            print('\t' + '*' if dropped>0 else ' ' + 'Dropped', dropped, 'tracks, out of', len(tracks))
+            log.write('\t' + '*' if dropped>0 else ' ' + 'Dropped ' + str(dropped) + ' tracks, out of ' + str(len(tracks)) + '\n')
             print('\tDone.')
             log.write('\tDone.\n')
         except Exception:
@@ -147,4 +146,4 @@ def loaddata(destinationfolder, songlist, logfile):
 
 if __name__=='__main__':
     #loaddata('rs500', 'rs500.txt', 'rs500.log')
-    loaddata('test', 'test.txt', 'test.log')
+    loaddata('larkin1000', 'Larkin1000.txt', 'Larkin1000.log')
