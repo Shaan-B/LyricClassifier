@@ -29,7 +29,7 @@ class Song(object):
         self.lyrics = lyrics
         self.title = title.replace('\n', '')
         self.artist = artist.replace('\n', '')
-        self.genres = genres if notfound=='add' else []
+        self.genres = genres if (notfound=='replace' or notfound=='add') else []
         if len(genres)==0 or notfound=='add':
             artistgenres = spotifyclient.getArtistGenres(self.artist, GENRES)
             if artistgenres:

@@ -1,32 +1,17 @@
 import loadsongs
+import loaddata
 import song
 from song import Song
 import spotifyclient
-
-"""
-song_title = 'The 500 Greatest Albums of All Time'
-artist_name = 'Rolling'
-
-search_url = webscraper.base_url + "/search"
-params = {'q': song_title + " " + artist_name}
-response = requests.get(search_url, params=params, headers=webscraper.headers)
-json = response.json()
-for hit in json["response"]["hits"]:
-    if artist_name.lower() in hit["result"]["primary_artist"]["name"].lower(): #requires artist_name is substring of Genius's artist name
-        print(hit["result"]["api_path"])
-        break
-"""
-
-#print(len(loaddata.getAlbumTracks('Yeezus', 'ye')))
-
+import os
+import glob
+import hdf5_getters
+import webscraper
 
 
 #TODO: say that a song is only pop if it doesn't fit any other genre
 
-import loaddata
-import loadsongs
-
-def genreDistribution(songs):
+def genreDistribution(songs, genrelist=[]):
     print('Total number of songs:', len(songs))
     genrecounts = {}
     genrecountcounts = {}
@@ -37,6 +22,8 @@ def genreDistribution(songs):
         else:
             genrecountcounts[len(song.genres)] = 1
         for genre in song.genres:
+            if len(genrelist)>0 and genre not in genrelist:
+                continue
             if genre in genrecounts.keys():
                 genrecounts[genre] += 1
             else:
@@ -48,5 +35,6 @@ def genreDistribution(songs):
     for count in genrecountcounts:
         print(str(count) + ': ' + str(genrecountcounts[count]))
 
+genreDistribution(loadsongs.load('testMillion'), song.GENRES)
 
 #print(loaddata.getAlbumTracks('No Secrets', 'Carly'))

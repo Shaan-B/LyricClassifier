@@ -27,8 +27,9 @@ def getArtistGenres(artist_name, genres):
     matches = []
 
     for genre in artist['genres']:
-        if genre in genres:
-            matches.append(genre)
+        #Code stores ALL GENRES given by Spotify
+        #if genre in genres:
+        matches.append(genre)
 
     if len(matches) == 0:
         return None

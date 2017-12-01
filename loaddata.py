@@ -9,6 +9,9 @@ import requests
 import spotifyclient
 import song
 import os
+import os
+import glob
+import hdf5_getters
 
 #Better name for this file would be loadRS500.py. Oh well.
 
@@ -46,6 +49,23 @@ def getLarkin1000():
         albums[title] = items[0]
     return albums
 
+def getMillionSubset():
+#Returns a dictionary of album: artist pairs
+#from the Million Song Dataset subset available on columbia.edu
+    albums = {}
+    basedir = 'millionsubset/B/I'
+    ext = '.hd5'
+    subdir = basedir
+    for root, dirs, files in os.walk(basedir):
+        for f in files:
+            f = os.path.join(root,f)
+            h5 = hdf5_getters.open_h5_file_read(f)
+            title = hdf5_getters.get_title(h5).decode('utf-8')
+            artist = hdf5_getters.get_artist_name(h5).decode('utf-8')
+            albums[title] = artist
+            h5.close()
+    return albums
+
 def getAlbumTracks(album, artist):
 #Takes in an album/artist pair and returns a list of Song objects
 #Requires artist to be an exact substring of Spotify's data
@@ -75,7 +95,9 @@ def getAlbumTracks(album, artist):
             tracknames.append(name)
     return tracknames
 
-def getSongLyrics(tracknames, artist, f=None):
+def getTracklistLyrics(tracknames, artist, f=None):
+#takes in a list of tracknames with a common artist, and
+#returns a list of song objects
     songs = []
     for track in tracknames:
         if not track:
@@ -97,17 +119,14 @@ def lensort(a):
                 a[j] = temp
     return a
 
-def loaddata(destinationfolder, songlist, logfile):
+def loadDataFromAlbums(albums, destinationfolder, songlist, logfile, droppedfile='dropped.txt'):
+#Takes in a dictionary of album: artist  pairs
 #Writes songs to .pkl file and stores their metadata in songlist
 #Requires a log file for now. TODO: Don't require a log file
     num_tracks = 0
     log=open(logfile, 'w+')
-
-    #albums = {'Yeezus': 'Kanye West', 'DAMN': 'Kendrick Lamar', '4 Your Eyez Only': 'J. Cole'}
-    #albums = getRS500()
-    albums = getLarkin1000()
     f = open(songlist, 'w+')
-    d = open('dropped.txt', 'w+')
+    d = open(droppedfile, 'w+')
     for album in albums:
         print(album)
         log.write(album+'\n')
@@ -121,8 +140,9 @@ def loaddata(destinationfolder, songlist, logfile):
                 if tracks:
                     print('\tFinding song lyrics...')
                     log.write('\tFinding song lyrics...\n')
-                    tracks = getSongLyrics(tracks, word, log)
+                    tracks = getTracklistLyrics(tracks, word, log)
                     fragment = word
+                    break
             if not tracks:
                 print('\tNot found.')
                 log.write('\tNot found.\n')
@@ -157,7 +177,93 @@ def loaddata(destinationfolder, songlist, logfile):
     log.write('Saved ' + str(num_tracks) + ' tracks.\n')
     log.close()
     f.close()
+    d.close()
+
+def loadDataFromSongs(songmetas, destinationfolder, songlist, logfile, droppedfile='dropped.txt'):
+#Takes in a dictionary of song: artist pairs
+#Writes songs to .pkl file and stores their metadata in songlist
+#Requires a log file for now. TODO: Get rid of parentheses
+    num_tracks = 0
+    log=open(logfile, 'w+')
+    f = open(songlist, 'w+')
+    d = open(droppedfile, 'w+')
+    dropped = 0
+    lostArtists = 0
+    lostLyrics = 0
+
+    total = len(songmetas)
+    count = 0
+    for songmeta in songmetas:
+        count += 1
+        try:
+            title = songmeta if '(' not in songmeta else songmeta[:songmeta.index('(')-1]
+            if '[' in title:
+                title = songmeta[:songmeta.index('[')-1]
+            artist = songmetas[songmeta]
+            if 'feat.' in artist:
+                artist = artist[:artist.index('feat.')-1]
+            print(title+' by '+artist+'... ('+str(count)+' of '+str(total)+')')
+            log.write(title+' by '+artist+'...('+str(count)+' of '+str(total)+')'+'\n')
+            print('\tFetching genres...', end='')
+            log.write('\tFetching genres...')
+            g = spotifyclient.getArtistGenres(artist, [])
+            if g:
+                print('found',len(g))
+                log.write('found '+str(len(g))+' \n')
+                if len(g)==0:
+                    print('\tSkipping.')
+                    log.write('\tSkipping...\t')
+                    continue
+            if not g:
+                print('Artist not found.')
+                log.write('Artist not found.\n')
+                lostArtists += 1
+                continue
+            print('\tFinding lyrics...')
+            log.write('\tFinding lyrics...\n')
+            for word in artist.split(' '):
+                song = webscraper.getSong(title, word, genres=g, notfound='replace')
+                if song:
+                    fragment = word
+                    break
+            if not song:
+                lostLyrics += 1
+                print('\tNot found.')
+                log.write('\tNot found.')
+                continue
+            namecopy = song.title.replace(' ', '')
+            name = ''
+            for c in namecopy:
+                if c in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890":
+                    name += c
+            i = 1
+            while os.path.isfile(os.path.join(destinationfolder, name+'.pkl')):
+                name = str(i)
+                i += 1
+            song.saveSong(name+'.pkl', destinationfolder)
+            f.write(song.title + ', ' + artist + '\n')
+            num_tracks += 1
+            print('\tSaved.')
+            log.write('\tSaved.\n')
+        except Exception as e:
+            dropped += 1
+            print('There was a problem with the song ', str(e)+':', str(type(e)))
+            log.write('There was a problem with the song: ' + str(e)+': '+str(type(e))+'\n')
+            d.write(songmeta +', '+songmetas[songmeta]+'\n')
+    print('Saved', num_tracks, 'tracks out of', len(songmetas))
+    print('\t',dropped,'tracks threw errors.')
+    print('\t',lostArtists,'artists were not found.')
+    print('\t',lostLyrics,'lyrics were not found.')
+    log.write('Saved ' + str(num_tracks) + ' tracks out of ' + str(len(songmetas)) + '\n')
+    log.write('\t' + str(dropped) +' tracks threw errors.')
+    log.write('\t' +str(lostArtists) + ' artists were not found.')
+    log.write('\t' +str(lostLyrics) + ' artists were not found.')
+    log.close()
+    f.close()
+    d.close()
+
 
 if __name__=='__main__':
     #loaddata('rs500', 'rs500.txt', 'rs500.log')
-    loaddata('testlarkin1000', 'testLarkinSongs.txt', 'testLarkin1000.log')
+    #loadDataFromAlbums(getLarkin1000(), 'testlarkin1000', 'testLarkinSongs.txt', 'testLarkin1000.log')
+    loadDataFromSongs(getMillionSubset(), 'testMillion', 'testMillion.txt', 'testMillion.log')
