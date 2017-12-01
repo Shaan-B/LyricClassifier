@@ -56,11 +56,13 @@ def getAlbumTracks(album, artist):
     sp.trace=False
     results = sp.search(q=album, limit=1, type='album')
     uri = None
+    artistwords = artist.split(' ')
     for i, t in enumerate(results['albums']['items']):
         for a in t['artists']:
-            if artist in a['name']:
-                uri= t
-                break
+            for artistword in artistwords:
+                if artistword in a['name']:
+                    uri= t
+                    break
     if not uri:
         return None
     item = sp.album(t['uri'])
@@ -72,8 +74,16 @@ def getAlbumTracks(album, artist):
             name = name[:name.index('-')]
         if name not in tracknames:
             tracknames.append(name)
+    return tracknames
+
+def getSongLyrics(tracknames, artist, f=None):
     songs = []
     for track in tracknames:
+        if not track:
+            continue
+        if f:
+            print('\t\tGetting ' + track + '...')
+            f.write('\t\tGetting ' + track + '...\n')
         songs.append(webscraper.getSong(track, artist))
     return songs
 
@@ -97,6 +107,8 @@ def loaddata(destinationfolder, songlist, logfile):
     #albums = {'Yeezus': 'Kanye West', 'DAMN': 'Kendrick Lamar', '4 Your Eyez Only': 'J. Cole'}
     #albums = getRS500()
     albums = getLarkin1000()
+    f = open(songlist, 'w+')
+    d = open('dropped.txt', 'w+')
     for album in albums:
         print(album)
         log.write(album+'\n')
@@ -108,15 +120,16 @@ def loaddata(destinationfolder, songlist, logfile):
             for word in artistwords:
                 tracks = getAlbumTracks(album, albums[album])
                 if tracks:
+                    print('\tFinding song lyrics...')
+                    log.write('\tFinding song lyrics...\n')
+                    tracks = getSongLyrics(tracks, word, log)
                     fragment = word
-                    break
             if not tracks:
                 print('\tNot found.')
                 log.write('\tNot found.\n')
                 continue
             print('\tSaving...')
             log.write('\tSaving...\n')
-            f = open(songlist, 'w+')
             dropped = 0
             for track in tracks:
                 try:
@@ -130,16 +143,17 @@ def loaddata(destinationfolder, songlist, logfile):
                         name += str(i)
                         i += 1
                     track.saveSong(name+'.pkl', destinationfolder)
-                    f.write(track.title + ', ' + fragment if fragment else albums[album] + '\n')
+                    f.write(track.title + ', ' + (fragment if fragment else albums[album]) + '\n')
                     num_tracks += 1
                 except Exception:
                     dropped += 1
-            print('\t' + '*' if dropped>0 else ' ' + 'Dropped', dropped, 'tracks, out of', len(tracks))
-            log.write('\t' + '*' if dropped>0 else ' ' + 'Dropped ' + str(dropped) + ' tracks, out of ' + str(len(tracks)) + '\n')
+            print('\t' + ('*' if dropped>0 else '') + 'Dropped', dropped, 'tracks, out of', len(tracks))
+            log.write('\t' + ('*' if dropped>0 else '') + 'Dropped ' + str(dropped) + ' tracks, out of ' + str(len(tracks)) + '\n')
             print('\tDone.')
             log.write('\tDone.\n')
         except Exception:
             print('\tSomething\'s wrong with that album...')
+            d.write(album + ', ' + albums[album] + '\n')
     print('Saved', num_tracks, 'tracks.')
     log.write('Saved ' + str(num_tracks) + ' tracks.\n')
     log.close()
@@ -147,4 +161,4 @@ def loaddata(destinationfolder, songlist, logfile):
 
 if __name__=='__main__':
     #loaddata('rs500', 'rs500.txt', 'rs500.log')
-    loaddata('larkin1000', 'Larkin1000.txt', 'Larkin1000.log')
+    loaddata('testlarkin1000', 'testLarkinSongs.txt', 'testLarkin1000.log')

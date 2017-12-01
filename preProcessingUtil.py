@@ -11,15 +11,15 @@ hi = "hi"
 
 #onehot encoder
 #takes as input the number of classes and the label list of the data
-def oneHotEncoder(num_classes, labels):
-    le = preprocessing.LabelEncoder()
-    le.fit(labels)
-    encodedLabels = le.transform(labels).tolist()
-
-    a = np.array(encodedLabels)
-    onehotLabels = np.zeros((len(encodedLabels), num_classes))
-    onehotLabels[np.arange(len(encodedLabels)), a] = 1
-    return onehotLabels
+# def oneHotEncoder(num_classes, labels):
+#     le = preprocessing.LabelEncoder()
+#     le.fit(labels)
+#     encodedLabels = le.transform(labels).tolist()
+#
+#     a = np.array(encodedLabels)
+#     onehotLabels = np.zeros((len(encodedLabels), num_classes))
+#     onehotLabels[np.arange(len(encodedLabels)), a] = 1
+#     return onehotLabels
 
 def get_document_filenames(document_path='music'):
         return [os.path.join(document_path, each) for each in os.listdir(document_path)]
@@ -44,8 +44,9 @@ def lyrics2POS(songs):
         fullPOSList.append(" ".join(justTags))
     return fullPOSList
 
-def vectorize(tokenizedList):
-    tfidfVectorizer = TfidfVectorizer(ngram_range=(1, 1), stop_words='english', analyzer='word')
+def vectorize(tokenizedList, rang):
+    #print(tokenizedList[0])
+    tfidfVectorizer = TfidfVectorizer(ngram_range=(1, rang), stop_words='english', analyzer='word')
     vector = tfidfVectorizer.fit_transform(tokenizedList).todense()
     #print(tfidfVectorizer.get_feature_names())
     return vector
