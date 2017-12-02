@@ -38,15 +38,15 @@ def gan(inputLayer, outputLayer):
     return m
 
 #rnn
-def rnn(inputLayer, outputLayer):
-    net = tflearn.input_data([None, inputLayer])
-    net = tflearn.embedding(net, input_dim=10000, output_dim=128)
-    net = tflearn.lstm(net, 128, dropout=0.8)
-    net = tflearn.fully_connected(net, outputLayer, activation='softmax')
-    net = tflearn.regression(net) #, optimizer='adam', learning_rate=0.001,
-                         #loss='categorical_crossentropy')
-    model = tflearn.DNN(net, tensorboard_verbose=3)
-    return model
-
-def fit(model):
-    return
+#def rnn(inputLayer, outputLayer):
+#    net = tflearn.input_data([None, inputLayer])
+#    net = tflearn.embedding(net, input_dim=10000, output_dim=128)
+#    net = tflearn.lstm(net, 128, dropout=0.8)
+#    net = tflearn.fully_connected(net, outputLayer, activation='softmax')
+#    net = tflearn.regression(net) #, optimizer='adam', learning_rate=0.001,
+#                         #loss='categorical_crossentropy')
+#    model = tflearn.DNN(net, tensorboard_verbose=3)
+#    return model
+#
+#def fit(model):
+#    return

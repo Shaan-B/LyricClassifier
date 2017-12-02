@@ -6,20 +6,31 @@ import os
 from sklearn import preprocessing
 import numpy as np
 
-string = "Some people might think that traveling in a group led by a tour guide is a good way. But, a group tour normally has its strict schedule and does not offer the tourists in group any chance to meet many people in new place. So, I strongly disagree with the statement that the best way to travel is in a group led by a tour guide."
-hi = "hi"
-
-#onehot encoder
-#takes as input the number of classes and the label list of the data
-# def oneHotEncoder(num_classes, labels):
-#     le = preprocessing.LabelEncoder()
-#     le.fit(labels)
-#     encodedLabels = le.transform(labels).tolist()
-#
-#     a = np.array(encodedLabels)
-#     onehotLabels = np.zeros((len(encodedLabels), num_classes))
-#     onehotLabels[np.arange(len(encodedLabels)), a] = 1
-#     return onehotLabels
+def oneHotEncoder(songs):
+    genresIndeces = {
+    'pop' : 0,
+    'rap' : 1,
+    'rock' : 2,
+    'r&b' : 3,
+    'country' : 4,
+    'jazz' : 5,
+    'blues' : 6,
+    'gospel' : 7,
+    'reggae' : 8,
+    'electronic' : 9
+    }
+    encodings = []
+    for song in songs:
+        if(len(song.genres) >= 1):
+        #     zeros  = [0,0,0,0,0,0,0,0]
+        #     zeros[genresIndeces[song.genres[0]]] = 1
+        # if(len(song.genres > 1)):
+            hotVal = 1/len(song.genres)
+            zeros  = [ 0 for i in range(len(genreIndeces))]
+            for genre in song.genres:
+                zeros[genresIndeces[genre]] = hotVal
+            encodings.append(zeros)
+    return encodings
 
 def get_document_filenames(document_path='music'):
         return [os.path.join(document_path, each) for each in os.listdir(document_path)]
