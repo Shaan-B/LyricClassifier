@@ -53,17 +53,20 @@ def getMillionSubset():
 #Returns a dictionary of album: artist pairs
 #from the Million Song Dataset subset available on columbia.edu
     albums = {}
-    basedir = 'millionsubset/B/I'
+    basedir = 'millionsubset'
     ext = '.hd5'
     subdir = basedir
     for root, dirs, files in os.walk(basedir):
         for f in files:
-            f = os.path.join(root,f)
-            h5 = hdf5_getters.open_h5_file_read(f)
-            title = hdf5_getters.get_title(h5).decode('utf-8')
-            artist = hdf5_getters.get_artist_name(h5).decode('utf-8')
-            albums[title] = artist
-            h5.close()
+            try:
+                f = os.path.join(root,f)
+                h5 = hdf5_getters.open_h5_file_read(f)
+                title = hdf5_getters.get_title(h5).decode('utf-8')
+                artist = hdf5_getters.get_artist_name(h5).decode('utf-8')
+                albums[title] = artist
+                h5.close()
+            except:
+                print('Missed a file...')
     return albums
 
 def getAlbumTracks(album, artist):
@@ -266,4 +269,4 @@ def loadDataFromSongs(songmetas, destinationfolder, songlist, logfile, droppedfi
 if __name__=='__main__':
     #loaddata('rs500', 'rs500.txt', 'rs500.log')
     #loadDataFromAlbums(getLarkin1000(), 'testlarkin1000', 'testLarkinSongs.txt', 'testLarkin1000.log')
-    loadDataFromSongs(getMillionSubset(), 'testMillion', 'testMillion.txt', 'testMillion.log')
+    loadDataFromSongs(getMillionSubset(), 'MillionPKLs', 'millionSubset.txt', 'millionSubset.log')

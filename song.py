@@ -40,6 +40,20 @@ class Song(object):
                 if len(genres) > 0:
                     self.genres = genres
 
+    def filter(self, allowed):
+    #Takes in a list of allowed genres and updates self.genres
+    #returns a list of removed genres
+        removed = []
+        new = []
+        for g in self.genres:
+            for a in allowed:
+                if a not in new and a in g:
+                    new.append(a)
+                else:
+                    removed.append(g)
+        self.genres = new
+        return removed
+
     def tokens(self):
         return word_tokenize(self.simpleLyrics())
 

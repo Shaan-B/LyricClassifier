@@ -9,6 +9,8 @@ import hdf5_getters
 import webscraper
 
 
+#loadsongs.convertPKLto2('MillionPKLs', 'MillionPKLs_v2')
+
 #TODO: say that a song is only pop if it doesn't fit any other genre
 
 def genreDistribution(songs, genrelist=[]):
@@ -28,13 +30,15 @@ def genreDistribution(songs, genrelist=[]):
                 genrecounts[genre] += 1
             else:
                 genrecounts[genre] = 1
-    for genre in genrecounts:
-        print(genre + ': ' + str(genrecounts[genre]))
+    for genre in sorted(genrecounts.items(), key=lambda x: x[1]):
+        print(genre[0] + ': ' + str(genre[1]))
+        #print(genre + ': ' + str(genrecounts[genre]))
     print()
     print('Number of genres:')
     for count in genrecountcounts:
         print(str(count) + ': ' + str(genrecountcounts[count]))
 
-genreDistribution(loadsongs.load('testMillion'), song.GENRES)
+g = ['blues', 'punk', 'reggae', 'gospel', 'country', 'pop', 'rock', 'rap', 'r&b', 'electronic', 'jazz']
+genreDistribution(loadsongs.load('MillionPKLs', g))
 
 #print(loaddata.getAlbumTracks('No Secrets', 'Carly'))
