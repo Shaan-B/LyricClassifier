@@ -2,6 +2,7 @@ import webscraper
 import os
 import sys
 from song import Song
+import pickle as pickle
 
 def save(listfile, destinationfolder):
 #Takes in a file in the following format:
@@ -41,17 +42,36 @@ def save(listfile, destinationfolder):
     #     print('Somthing went wrong...')
     #     print(e)
 
-def load(folder):
+def load(folder, genres=[]):
 #Takes in a folder and returns a list of Song objects from the .pkl files it contains
     songs = []
     try:
         for f in os.listdir(folder):
             if f.endswith('.pkl'):
-                songs.append(Song.openSong(os.path.join(folder, f)))
+                s = Song.openSong(os.path.join(folder, f))
+                s.filter(genres)
+                if len(s.genres)>0:
+                    songs.append(s)
         return songs
     except Exception as e:
         print('Somthing went wrong...')
         print(e)
+
+def convertPKLto2(folder, newfolder):
+    songs = load(folder)
+    for song in songs:
+        namecopy = song.title.replace(' ', '')
+        name = ''
+        for c in namecopy:
+            if c in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890":
+                name += c
+        i = 1
+        while os.path.isfile(os.path.join(newfolder, name+'.pkl')):
+            name += str(i)
+            i += 1
+        filename = os.path.join(newfolder, name)+'.pkl'
+        f = open(filename, 'wb+')
+        pickle.dump(song, f, protocol=2)
 
 if __name__ == '__main__':
     path = None

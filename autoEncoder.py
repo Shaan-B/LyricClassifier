@@ -6,11 +6,11 @@ import tflearn
 def autoEncoder(inputLayer, outputLayer):
     # Building the encoder
     encoder = tflearn.input_data(shape=[None, inputLayer])
-    encoder = tflearn.fully_connected(encoder, int(inputLayer * .32))
-    encoder = tflearn.fully_connected(encoder, int(inputLayer * .08))
+    encoder = tflearn.fully_connected(encoder, int(inputLayer * .6))
+    encoder = tflearn.fully_connected(encoder, int(inputLayer * .4))
 
     # Building the decoder
-    decoder = tflearn.fully_connected(encoder, int(inputLayer * .32))
+    decoder = tflearn.fully_connected(encoder, int(inputLayer * .6))
     decoder = tflearn.fully_connected(decoder, inputLayer, activation='sigmoid')
 
     # Regression, with mean square error
@@ -23,6 +23,7 @@ def autoEncoder(inputLayer, outputLayer):
 #x in the data input (tf-idf)
 def trainEncoder(X, model, encoder):
     # Training the auto encoder
+    print "x shape: ", X.shape
     model.fit(X, X, n_epoch=20, run_id="auto_encoder",
                     batch_size=256, show_metric=True)
 

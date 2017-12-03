@@ -29,23 +29,10 @@ class Song(object):
         self.lyrics = lyrics
         self.title = title.replace('\n', '')
         self.artist = artist.replace('\n', '')
-#=======
-    #     self.genres = []
-    #     #if (len(genres)==0) or notfound=='add':
-    # #    print('doing it')
-    #     #print(self.artist)
-    #     artistgenres = spotifyclient.getArtistGenres(self.artist, GENRES.keys())
-    #     print("tetsing here: ", artistgenres)
-    #     self.genres = artistgenres
-    #     # if artistgenres:
-    #     #     for g in artistgenres:
-    #     #         self.genres.append(g)
-    #     # elif notfound == 'prompt':
-    #     #     genres = raw_input('Genres not found, please input: ').split(',')
-    #     #     if len(genres) > 0:
-    #     #         self.genres = genres
-#=======
         self.genres = genres if notfound=='add' else []
+
+        self.genres = genres if (notfound=='replace' or notfound=='add') else []
+
         if len(genres)==0 or notfound=='add':
             artistgenres = spotifyclient.getArtistGenres(self.artist, GENRES)
             if artistgenres:
@@ -56,10 +43,23 @@ class Song(object):
                 if len(genres) > 0:
                     self.genres = genres
 
+    def filter(self, allowed):
+    #Takes in a list of allowed genres and updates self.genres
+    #returns a list of removed genres
+        removed = []
+        new = []
+        for g in self.genres:
+            for a in allowed:
+                if a not in new and a in g:
+                    new.append(a)
+                else:
+                    removed.append(g)
+        self.genres = new
+        return removed
 
     def tokens(self):
         return word_tokenize(self.simpleLyrics())
-
+#throws out all lyrics after mismatched bracket
     def  simpleLyrics(self):
     #Removes "[Chorus]", "[Verse X]", etc., punctuation, and newlines
         lyrics = self.lyrics.lower()
@@ -71,7 +71,7 @@ class Song(object):
             if c in allowedChars:
                 simpleLyrics += c
             elif c=='[':
-                while lyrics[i]!=']':
+                while i<len(lyrics) and lyrics[i]!=']':
                     i +=1
             elif c in '\n\t':
                 simpleLyrics += ' '
