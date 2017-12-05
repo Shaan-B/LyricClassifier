@@ -40,8 +40,8 @@ def oneHotEncoder(songs):
 
 g = ['blues', 'country', 'pop', 'rock', 'rap', 'r&b']
 
-songs = loadsongs.load('MillionPKLs_v2', g)[200:500]
-
+songs = loadsongs.load('larkin1000_v2', g)
+songs = [song for song in songs if song.genres[0] != 'rock']
 def genreDistribution(songs):
     print('Total number of songs:', len(songs))
     genrecounts = {}
@@ -72,8 +72,11 @@ posData = vectorize(lyrics2POS([song.simpleLyrics() for song in songs]), 2)
 poss = np.array(vectorize(lyrics2POS([song.simpleLyrics() for song in songs]), 2))
 labels = np.array(oneHotEncoder(songs))
 
-model = modelBuilder(len(tfidfs.tolist()[0]), 10)
-model.fit(tfidfs, np.array(oneHotEncoder(songs)), n_epoch=1000, batch_size=50, show_metric=True)
+#newTensors = np.array([np.append(tfidfs[i], poss[i]) for i in range(len(tfidfs))])
+#model = modelBuilder(len(newTensors.tolist()[0]), 10)
+#model.fit(newTensors, labels, n_epoch=100, show_metric=True, batch_size=25)
+model = modelcnn(len(poss.tolist()[0]), 10)
+model.fit(poss, np.array(oneHotEncoder(songs)), n_epoch=1000, batch_size=50, show_metric=True)
 posmodel, posencoder = autoEncoder(len(posData.tolist()[0]), 10)
 posmodel = trainEncoder(poss, posmodel, posencoder)
 possencodings = [posencoder.predict(np.array([pos])).tolist()[0] for pos in poss]
