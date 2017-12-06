@@ -269,4 +269,4 @@ def loadDataFromSongs(songmetas, destinationfolder, songlist, logfile, droppedfi
 if __name__=='__main__':
     #loaddata('rs500', 'rs500.txt', 'rs500.log')
     #loadDataFromAlbums(getLarkin1000(), 'testlarkin1000', 'testLarkinSongs.txt', 'testLarkin1000.log')
-    loadDataFromSongs(getMillionSubset(), 'MillionPKLs', 'millionSubset.txt', 'millionSubset.log')
+    loadDataFromAlbums(getLarkin1000(), 'larkin1000_allgenres', 'larkin1000_allgenres.txt', 'larkin1000_allgenres.log')
