@@ -40,7 +40,7 @@ def oneHotEncoder(songs):
 
 g = ['blues', 'country', 'pop', 'rock', 'rap', 'r&b']
 
-songs = loadsongs.load('larkin1000_v2', g)
+songs = loadsongs.load('data/larkin1000_v2', g)
 songs = [song for song in songs if song.genres[0] != 'rock']
 def genreDistribution(songs):
     print('Total number of songs:', len(songs))
@@ -67,9 +67,11 @@ def genreDistribution(songs):
 
 print(genreDistribution(songs))
 data = vectorize([song.simpleLyrics() for song in songs], 1)
+#print data[0].tolist()
+
 tfidfs = np.array(data)
-posData = vectorize(lyrics2POS([song.simpleLyrics() for song in songs]), 2)
-poss = np.array(vectorize(lyrics2POS([song.simpleLyrics() for song in songs]), 2))
+posData = vectorize(lyrics2POS([song.simpleLyrics() for song in songs]), 3)
+poss = np.array(vectorize(lyrics2POS([song.simpleLyrics() for song in songs]), 3))
 labels = np.array(oneHotEncoder(songs))
 
 #newTensors = np.array([np.append(tfidfs[i], poss[i]) for i in range(len(tfidfs))])

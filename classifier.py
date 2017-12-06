@@ -7,14 +7,14 @@ from tflearn.layers.merge_ops import merge
 #fully connected neural net
 def modelBuilder(inputLayer, outputLayer):
     net = tflearn.input_data(shape=[None, inputLayer])
-    net = tflearn.fully_connected(net, int(inputLayer * .75))#, activation="leaky_relu")
+    net = tflearn.fully_connected(net, int(inputLayer * .75))#, activation="sigmoid")
 #    need to expand dimensions to use max pool
     net = tf.expand_dims(net, 2)
     net = max_pool_1d(net, int(inputLayer * .6))
 
-    net = tflearn.fully_connected(net, int(inputLayer * .5))#, activation="leaky_relu")
+    net = tflearn.fully_connected(net, int(inputLayer * .5))#, activation="sigmoid")
 
-    net = tflearn.fully_connected(net, int(inputLayer * .25))#, activation="leaky_relu")
+    net = tflearn.fully_connected(net, int(inputLayer * .25))#, activation="sigmoid")
     net = tflearn.fully_connected(net, outputLayer, activation='softmax')
     net = tflearn.regression(net)#, loss='softmax_categorical_crossentropy')
     model = tflearn.DNN(net, tensorboard_verbose=3)
@@ -23,9 +23,9 @@ def modelBuilder(inputLayer, outputLayer):
 def modelcnn(inputLayer, outputLayer):
 	network = tflearn.input_data(shape=[None, inputLayer], name='input')
 	network = tflearn.embedding(network, input_dim=inputLayer, output_dim=outputLayer)
-	branch1 = conv_1d(network, int(inputLayer * .15), 3, padding='valid', activation='relu', regularizer="L2")
-	branch2 = conv_1d(network, int(inputLayer * .15), 4, padding='valid', activation='relu', regularizer="L2")
-	branch3 = conv_1d(network, int(inputLayer * .15), 5, padding='valid', activation='relu', regularizer="L2")
+	branch1 = conv_1d(network, int(inputLayer * .15), 3)#, padding='valid', activation='relu', regularizer="L2")
+	branch2 = conv_1d(network, int(inputLayer * .15), 4)#, padding='valid', activation='relu', regularizer="L2")
+	branch3 = conv_1d(network, int(inputLayer * .15), 5)#, padding='valid', activation='relu', regularizer="L2")
 	network = merge([branch1, branch2, branch3], mode='concat', axis=1)
 	network = tf.expand_dims(network, 2)
 	network = global_max_pool(network)
@@ -34,7 +34,7 @@ def modelcnn(inputLayer, outputLayer):
 	network = tflearn.regression(network, optimizer='adam', learning_rate=0.001,
                      loss='categorical_crossentropy', name='target')
 # Training
-	model = tflearn.DNN(network, tensorboard_verbose=0)
+	model = tflearn.DNN(network, tensorboard_verbose=3)
 	return model
 
 #generative adversarial network, doesnt work
