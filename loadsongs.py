@@ -62,6 +62,7 @@ def clusteredSample(songs, n, genres):
 #   songs = clusteredSample(load(folder, n, g)
 #, where folder is the folder containing relevant .pkl files, n is the desired size
 #of the dataset, and g is a list of allowed genres
+#NOTE: This function is not built to handle all exceptions. It might blow up if you don't treat it nicely
     d = {}
     for s in songs:
         for genre in s.genres:
@@ -72,16 +73,14 @@ def clusteredSample(songs, n, genres):
             else:
                 d[genre] = [s]
     l = []
-    i=0
     for genre in d:
-        d[genre].sort(key=lambda x: -1*len(x.genres))
+        random.shuffle(d[genre])
     while len(l)<n:
         g = list(d.keys())
         r1 = int(random.uniform(0, len(g)-1))
-        if len(d[g[r1]]) != 0:
+        if len(d[g[r1]]) != 0 and len(d[g[r1]]):
             l.append(d[g[r1]].pop(0))
         if len(d[g[r1]])==0:
-            print('out of songs')
             g.pop(r1)
     return l
 
@@ -124,12 +123,11 @@ def genreDistribution(songs, genrelist=[]):
                 genrecounts[genre] = 1
     for genre in sorted(genrecounts.items(), key=lambda x: x[1]):
         print(genre[0] + ': ' + str(genre[1]))
-        #print(genre + ': ' + str(genrecounts[genre]))
     print()
-    print('Number of genres:')
-    for count in genrecountcounts:
-        print(str(count) + ': ' + str(genrecountcounts[count]))
-    return genrecounts.keys()
+    # print('Number of genres:')
+    # for count in genrecountcounts:
+    #     print(str(count) + ': ' + str(genrecountcounts[count]))
+    # return genrecounts.keys()
 
 
 if __name__ == '__main__':
