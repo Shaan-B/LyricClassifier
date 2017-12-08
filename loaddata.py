@@ -29,7 +29,7 @@ def getRS500():
         i = line.index('.') + 2
         j = line.index('(') - 1
         title = line[i:j]
-        if title == 'The Beatles': title = 'White Album' #It's easier to do this
+        if title == 'The Beatles': title = 'White Album'
         elif len(title) == 0: title = 'Pronounced Leh-Nerd Skin-Nerd'
         i = line.index(' by ') + len(' by ')
         artist = line[i:]

@@ -11,12 +11,20 @@ import webscraper
 #loadsongs.convertPKLto2('MillionPKLs', 'MillionPKLs_v2')
 
 #TODO: say that a song is only pop if it doesn't fit any other genre
-
-songs = load('larkin1000_allgenres')
-genreDistribution(songs)
-songs = clusteredSample(songs, 100, song.GENRES)
-genreDistribution(songs)
 """
+homegirl = song.Song(open('HomegirlLyrics.txt', 'r').read(), title='Homegirl', artist='Two Cold', genres=['rap','pop'])
+homegirl.saveSong('Homegirl.pkl')
+"""
+
+tiwaGenres = ['country', 'pop', 'rock', 'rap', 'r&b']
+
+songs = load('larkin1000_allgenres', song.GENRES)
+genreDistribution(songs)
+songs = clusteredSample(songs, 500, song.GENRES)
+genreDistribution(songs)
+
+"""
+
 import spotifyclient
 g = ['blues', 'reggae', 'country', 'pop', 'rock', 'rap', 'r&b', 'electronic', 'jazz']
 g = song.GENRES
