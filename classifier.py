@@ -38,22 +38,23 @@ def modelcnn(inputLayer, outputLayer):
 	return model
 
 #generative adversarial network, doesnt work
-def gan(inputLayer, outputLayer):
-    g = tflearn.input_data([None, 100, inputLayer])
-    g = tflearn.lstm(g, 512, return_seq=True)
-    g = tflearn.dropout(g, 0.5)
-    g = tflearn.lstm(g, 512, return_seq=True)
-    g = tflearn.dropout(g, 0.5)
-    g = tflearn.lstm(g, 512)
-    g = tflearn.dropout(g, 0.5)
-    g = tflearn.fully_connected(g, outputLayer, activation='softmax')
-    g = tflearn.regression(g, optimizer='adam', loss='categorical_crossentropy',
-                           learning_rate=0.001)
-    m = tflearn.SequenceGenerator(g,
-                              seq_maxlen=50,
-                              clip_gradients=5.0,
-                              checkpoint_path='model_shakespeare')
-    return m
+# def gan(inputLayer, outputLayer):
+#     g = tflearn.input_data([None, 100, inputLayer])
+#     g = tflearn.lstm(g, 512, return_seq=True)
+#     g = tflearn.dropout(g, 0.5)
+#     g = tflearn.lstm(g, 512, return_seq=True)
+#     g = tflearn.dropout(g, 0.5)
+#     g = tflearn.lstm(g, 512)
+#     g = tflearn.dropout(g, 0.5)
+#     g = tflearn.fully_connected(g, outputLayer, activation='softmax')
+#     g = tflearn.regression(g, optimizer='adam', loss='categorical_crossentropy',
+#                            learning_rate=0.001)
+#     m = tflearn.SequenceGenerator(g,
+#                               seq_maxlen=50,
+#                               clip_gradients=5.0,
+#                               checkpoint_path='model_shakespeare')
+#     return m
+
 def encodeAndTrain(tfidfs, poss, labels, epochs, tfidfencoder, posencoder, batch=50):
     tfidfencodings = [tfidfencoder.predict(np.array([tfidf])).tolist()[0] for tfidf in tfidfs]
     posencodings = [posencoder.predict(np.array([pos])).tolist()[0] for pos in poss]
@@ -68,7 +69,7 @@ def encodeAndTrain(tfidfs, poss, labels, epochs, tfidfencoder, posencoder, batch
 
     model = modelBuilder(len(tfidfs[0]), 10)
     model.fit(np.array(newTensors), labels, n_epoch=epochs, show_metric=True, batch_size=batch)
-    return model 
+    return model
 
 
 #rnn
