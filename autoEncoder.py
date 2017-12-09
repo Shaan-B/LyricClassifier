@@ -27,10 +27,4 @@ def trainEncoder(X, model, encoder):
     # Training model will train the encoder in effect
     print "x shape: ", X.shape
     model.fit(X, X, n_epoch=20, run_id="auto_encoder", batch_size=256, show_metric=True)
-
-
-    # Encoding X[0] for test
-    #print("\nTest encoding of X[0]:")
-    # New model, re-using the same session, for weights sharing
-    #print(encoder.predict([X[0]]))
     return model
