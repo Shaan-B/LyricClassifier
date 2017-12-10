@@ -26,29 +26,24 @@ print()
 #Print the genre frequencies
 genreDistribution(songs)
 
-#The most intutive way to import our models for testing is to use model.load()
-#first you most reconstruct a model with equivilent structure to the model you wish to test
-# you can do this by calling a function from classifiers.py
-# next used model.load() on your model to load in pretrained weights
-# an example of how to load in a simple Feed Forward model trained on word count is shown below
+# Instead of including models weights which sized in the hundreds of megabytes, here
+# we provide a quick tutorial to quickly train and deploy a text classifier
 
+# First, transform your song list into a list of simple lyrics stripped of punctuation
+# and auxilary characters
 lyricsList  = [song.simpleLyrics() for song in songs]
 
+#Vectorize using functions from preProcessUtil.py
 data = vectorize(lyricsList, 1).tolist()
 inputLayerLength = len(data[0])
+
+#Computes nhot labels based on the genre distribution of each given song
 nhotLabels = nHotEncoder(songs)
 
-
+# modelBuilder returns a model with parameters describe in our write up
+# here is an example of our most standard model
 model = modelBuilder(inputLayerLength, 10)
-model.fit(np.array(data), np.array(nhotLabels), n_epoch=1, batch_size=50, show_metric=True)
+model.fit(np.array(data), np.array(nhotLabels), n_epoch=20, batch_size=50, show_metric=True)
+
+#returns a probabilty distribution over each of our possible genres
 print model.predict(np.array([data[0]]))
-
-
-# once a model is loaded, to make a prediction used any of our preprocessing utilities
-# to structure a string a lyrics into a representation that you model can use
-# our simple feed forward with word count model is trained on TF - IDF vector representation of word count
-# which can be obtained by running a string of lyrics through our vectorize function
-
-
-#make a prediction on the first song in our list
-model.predict(tfidfs[0])
