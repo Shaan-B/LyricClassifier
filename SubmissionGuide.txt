@@ -1,0 +1,24 @@
+Files from gitsux:
+
+hdf5_getters.py
+larkin1000_allgenres (directory)
+loaddata.py
+loadsongs.py
+song.py
+spotifyclient.py
+webscraper.py
+
+
+Communal edit:
+startup.py
+
+
+Files from bovine-branch/master:
+
+autoEncoder.py
+classifier.py
+oneHotEncoder.py
+preProcessingUtil.py
+
+
+Theoretically, running startup.py will work if we put all these files in the same folder

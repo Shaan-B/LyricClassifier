@@ -29,7 +29,7 @@ def getRS500():
         i = line.index('.') + 2
         j = line.index('(') - 1
         title = line[i:j]
-        if title == 'The Beatles': title = 'White Album' #It's easier to do this
+        if title == 'The Beatles': title = 'White Album'
         elif len(title) == 0: title = 'Pronounced Leh-Nerd Skin-Nerd'
         i = line.index(' by ') + len(' by ')
         artist = line[i:]
@@ -245,6 +245,4 @@ def loadDataFromSongs(songmetas, destinationfolder, songlist, logfile, droppedfi
 
 
 if __name__=='__main__':
-    #loaddata('rs500', 'rs500.txt', 'rs500.log')
-    #loadDataFromAlbums(getLarkin1000(), 'testlarkin1000', 'testLarkinSongs.txt', 'testLarkin1000.log')
-    loadDataFromSongs(getMillionSubset(), 'MillionPKLs', 'millionSubset.txt', 'millionSubset.log')
+    loadDataFromAlbums(getLarkin1000(), 'larkin1000_allgenres', 'larkin1000_allgenres.txt', 'larkin1000_allgenres.log')

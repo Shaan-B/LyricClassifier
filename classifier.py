@@ -9,8 +9,8 @@ def modelBuilder(inputLayer, outputLayer):
     net = tflearn.input_data(shape=[None, inputLayer])
     net = tflearn.fully_connected(net, int(inputLayer * .75))#, activation="sigmoid")
 #    need to expand dimensions to use max pool
-    net = tf.expand_dims(net, 2)
-    net = max_pool_1d(net, int(inputLayer * .6))
+    #net = tf.expand_dims(net, 2)
+    #net = max_pool_1d(net, int(inputLayer * .6))
 
     net = tflearn.fully_connected(net, int(inputLayer * .5))#, activation="sigmoid")
 
@@ -19,6 +19,7 @@ def modelBuilder(inputLayer, outputLayer):
     net = tflearn.regression(net)#, loss='softmax_categorical_crossentropy')
     model = tflearn.DNN(net, tensorboard_verbose=3)
     return model
+
 
 def modelcnn(inputLayer, outputLayer):
 	network = tflearn.input_data(shape=[None, inputLayer], name='input')

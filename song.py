@@ -9,9 +9,9 @@ GENRES = [
 'rock',
 'r&b',
 'country',
-'edm',
-'latin',
-'jazz'
+'jazz',
+'electronic',
+'blues'
 ]
 
 class Song(object):
@@ -110,7 +110,7 @@ class Song(object):
             except Exception:
                 pass
             f = open(os.path.join(subdirectory, filename), 'wb+')
-        pickle.dump(self, f)
+        pickle.dump(self, f, protocol=2)
 
     @staticmethod
     def openLyrics(filename):

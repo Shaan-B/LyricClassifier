@@ -1,3 +1,4 @@
+
 from song import *
 import webscraper
 from preProcessingUtil import *
@@ -6,6 +7,9 @@ import numpy as np
 import tflearn
 from sklearn import preprocessing
 import loadsongs
+
+from loadsongs import *
+import loaddata
 import song
 from song import Song
 import spotifyclient
@@ -15,7 +19,7 @@ import webscraper
 import tensorflow
 import requests
 from autoEncoder import *
-from oneHotEncoder import *
+from nHotEncoder import *
 
 g = ['blues', 'country', 'pop', 'rock', 'rap', 'r&b']
 
@@ -54,7 +58,7 @@ data = vectorize([song.simpleLyrics() for song in songs], 1)
 tfidfs = np.array(data)
 #posData = vectorize(lyrics2POS([song.simpleLyrics() for song in songs]), 3)
 #poss = np.array(vectorize(lyrics2POS([song.simpleLyrics() for song in songs]), 3))
-labels = np.array(oneHotEncoder(songs))
+labels = np.array(nHotEncoder(songs))
 for i,_ in enumerate(songs):
     if _.title == 'Homegirl': homeGirl = i
 print i
@@ -64,7 +68,7 @@ print i
 #model = modelBuilder(len(newTensors.tolist()[0]), 10)
 #model.fit(newTensors, labels, n_epoch=100, show_metric=True, batch_size=25)
 model = modelBuilder(len(tfidfs.tolist()[0]), 10)
-model.fit(tfidfs, np.array(oneHotEncoder(songs)), n_epoch=20, batch_size=50, show_metric=True)
+model.fit(tfidfs, np.array(nHotEncoder(songs)), n_epoch=20, batch_size=50, show_metric=True)
 print model.predict(np.array([tfidfs.tolist()[i]]))
 #posmodel, posencoder = autoEncoder(len(posData.tolist()[0]), 10)
 #posmodel = trainEncoder(poss, posmodel, posencoder)
@@ -89,29 +93,9 @@ finalModel = encodeAndTrain(tfidfs, poss, labels, 100, tfidfencoder, posencoder)
 
 #model.fit(trainX, trainY, n_epoch=200, batch_size=50, show_metric=True, validation_set=(testX, testY))
 
-def genreDistribution(songs, genrelist=[]):
-    print('Total number of songs:', len(songs))
-    genrecounts = {}
-    genrecountcounts = {}
-    nogenre = 0
-    for song in songs:
-        if len(song.genres) in genrecountcounts.keys():
-            genrecountcounts[len(song.genres)] += 1
-        else:
-            genrecountcounts[len(song.genres)] = 1
-        for genre in song.genres:
-            if len(genrelist)>0 and genre not in genrelist:
-                continue
-            if genre in genrecounts.keys():
-                genrecounts[genre] += 1
-            else:
-                genrecounts[genre] = 1
-    for genre in sorted(genrecounts.items(), key=lambda x: x[1]):
-        print(genre[0] + ': ' + str(genre[1]))
-        #print(genre + ': ' + str(genrecounts[genre]))
-    print()
-    print('Number of genres:')
-    for count in genrecountcounts:
-        print(str(count) + ': ' + str(genrecountcounts[count]))
+songs = load('larkin1000_allgenres', song.GENRES)
+genreDistribution(songs)
+songs = clusteredSample(songs, 500, song.GENRES)
+genreDistribution(songs)
 
 #genreDistribution(loadsongs.load('MillionPKLs', g))
