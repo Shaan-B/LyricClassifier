@@ -1,5 +1,4 @@
 import numpy as np
-#import matplotlib.pyplot as plt
 import tflearn
 
 #input size of input and ouput layer to generate a autoEncoder to reduce input by 60%
