@@ -1,4 +1,4 @@
-# cowsthattype
+# Song Lyric Genre Classifier
 A Deep Learning Approach to Genre Classification
 
 Final Artificial Intelligence class project for Shaan Bijwadia and Tiwalayo Eisape
